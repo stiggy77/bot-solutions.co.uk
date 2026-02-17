@@ -1,309 +1,153 @@
-:root{
-  --bg: #0b1324;
-  --panel: #0f1a33;
-  --panel2:#0c162e;
-  --text: #e6edf3;
-  --muted:#cbd5e1;
-  --muted2:#9aa7bd;
-  --line:#1f2a44;
-  --accent:#8fbaff;
-  --accent2:#4ea1ff;
-}
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BOT Solutions | Business Operations, Technology & Solutions</title>
+  <meta name="description" content="BOT Solutions helps businesses streamline operations with practical automation, reporting, and support." />
+  <link rel="stylesheet" href="assets/css/site.css" />
+</head>
 
-*{ box-sizing: border-box; }
+<body>
+  <header class="site-header">
+    <div class="container header-bar">
+      <a class="brand" href="index.html" aria-label="BOT Solutions home">
+        <span class="brand-mark" aria-hidden="true">BOT</span>
+        <span class="brand-text">
+          <span class="brand-name">BOT Solutions</span>
+          <span class="brand-tag">Business Operations, Technology &amp; Solutions</span>
+        </span>
+      </a>
 
-body{
-  margin:0;
-  font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
-  background: radial-gradient(1200px 600px at 20% 0%, #101f3f 0%, var(--bg) 55%) no-repeat;
-  color:var(--text);
-}
+      <nav class="nav" aria-label="Primary">
+        <a class="nav-link is-active" href="index.html">Home</a>
+        <a class="nav-link" href="services.html">Services</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
 
-.container{
-  width: min(1100px, 92%);
-  margin: 0 auto;
-}
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Automation • Reporting • Support</p>
+          <h1>Make your systems work like a team, not a tug-of-war.</h1>
+          <p class="lede">
+            BOT Solutions builds clean, reliable automation and reporting that saves time,
+            reduces errors, and keeps you in control.
+          </p>
 
-.site-header{
-  background: linear-gradient(180deg, rgba(15,26,51,0.98), rgba(15,26,51,0.88));
-  border-bottom: 1px solid var(--line);
-  position: sticky;
-  top: 0;
-  backdrop-filter: blur(6px);
-}
+          <div class="cta-row">
+            <a class="btn btn-primary" href="services.html">
+              View services
+              <span class="btn-icon" aria-hidden="true">→</span>
+            </a>
+            <a class="btn btn-ghost" href="contact.html">Contact</a>
+          </div>
 
-.header-bar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding: 14px 0;
-  gap: 16px;
-}
+          <ul class="tick-list" aria-label="Highlights">
+            <li>Documentation-first</li>
+            <li>Security-minded</li>
+            <li>Built for maintainability</li>
+          </ul>
+        </div>
 
-.brand{
-  display:flex;
-  align-items:center;
-  gap: 12px;
-  text-decoration:none;
-  color: var(--text);
-}
+        <div class="hero-panel" aria-hidden="true">
+          <div class="panel-card">
+            <p class="panel-title">Typical outcomes</p>
+            <ul class="panel-list">
+              <li><span class="dot"></span>Less manual work</li>
+              <li><span class="dot"></span>Clearer reporting</li>
+              <li><span class="dot"></span>Fewer missed tasks</li>
+              <li><span class="dot"></span>Better visibility</li>
+            </ul>
+            <p class="panel-foot">Simple solutions. Properly engineered.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-.brand-mark{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(78,161,255,0.30), rgba(143,186,255,0.08));
-  border: 1px solid rgba(143,186,255,0.25);
-  font-weight: 800;
-  letter-spacing: 0.04em;
-}
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>What we do</h2>
+          <p>Clean solutions you can start with today and expand into portals, licensing, and client areas later.</p>
+        </div>
 
-.brand-text{
-  display:flex;
-  flex-direction:column;
-  line-height: 1.15;
-}
+        <div class="grid">
+          <article class="card">
+            <div class="card-top">
+              <span class="badge">Reporting</span>
+              <span class="card-icon" aria-hidden="true">📊</span>
+            </div>
+            <h3>Reporting Packs</h3>
+            <p>Dashboards and scheduled summaries to email/Slack with clean logs and alerts.</p>
+            <a class="text-link" href="services.html">Learn more →</a>
+          </article>
 
-.brand-name{
-  font-weight: 700;
-}
+          <article class="card">
+            <div class="card-top">
+              <span class="badge">Automation</span>
+              <span class="card-icon" aria-hidden="true">⚙️</span>
+            </div>
+            <h3>Automation Kits</h3>
+            <p>Reliable scripts and integrations built to be maintained, not babysat.</p>
+            <a class="text-link" href="services.html">Learn more →</a>
+          </article>
 
-.brand-tag{
-  font-size: 0.85rem;
-  color: var(--muted2);
-}
+          <article class="card">
+            <div class="card-top">
+              <span class="badge">Support</span>
+              <span class="card-icon" aria-hidden="true">🛠️</span>
+            </div>
+            <h3>Support &amp; Optimisation</h3>
+            <p>Health checks, quick wins, and a roadmap to keep systems stable.</p>
+            <a class="text-link" href="services.html">Learn more →</a>
+          </article>
+        </div>
 
-.nav{
-  display:flex;
-  gap: 10px;
-  align-items:center;
-}
+        <div class="strip">
+          <div class="strip-item">
+            <span class="strip-num">01</span>
+            <div>
+              <p class="strip-title">Discover</p>
+              <p class="strip-text">Understand what you need and what “good” looks like.</p>
+            </div>
+          </div>
+          <div class="strip-item">
+            <span class="strip-num">02</span>
+            <div>
+              <p class="strip-title">Build</p>
+              <p class="strip-text">Deliver clear, documented solutions with logs and safety.</p>
+            </div>
+          </div>
+          <div class="strip-item">
+            <span class="strip-num">03</span>
+            <div>
+              <p class="strip-title">Support</p>
+              <p class="strip-text">Keep it stable with monitoring and improvements over time.</p>
+            </div>
+          </div>
+        </div>
 
-.nav-link{
-  color: var(--muted);
-  text-decoration:none;
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid transparent;
-  font-weight: 600;
-  font-size: 0.95rem;
-}
+        <div class="section-cta">
+          <a class="btn btn-primary" href="services.html">
+            Explore services
+            <span class="btn-icon" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
 
-.nav-link:hover{
-  border-color: rgba(143,186,255,0.25);
-  background: rgba(143,186,255,0.06);
-}
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year">2026</span> BOT Solutions</p>
+      <p class="muted">Built for clarity, not clutter.</p>
+    </div>
+  </footer>
 
-.nav-link.is-active{
-  color: var(--text);
-  border-color: rgba(143,186,255,0.28);
-  background: rgba(143,186,255,0.08);
-}
-
-.hero{
-  padding: 68px 0 34px;
-}
-
-.hero-inner{
-  display:grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 26px;
-  align-items: stretch;
-}
-
-.eyebrow{
-  color: var(--accent);
-  font-weight: 700;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  font-size: 0.78rem;
-  margin: 0 0 14px;
-}
-
-h1{
-  font-size: clamp(2.0rem, 3vw, 2.7rem);
-  margin: 0 0 14px;
-  line-height: 1.15;
-}
-
-.lede{
-  color: var(--muted);
-  font-size: 1.06rem;
-  line-height: 1.65;
-  max-width: 62ch;
-  margin: 0 0 18px;
-}
-
-.cta-row{
-  display:flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin: 0 0 14px;
-}
-
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding: 11px 14px;
-  border-radius: 12px;
-  text-decoration:none;
-  font-weight: 700;
-  border: 1px solid transparent;
-  transition: transform 0.05s ease, background 0.15s ease, border-color 0.15s ease;
-}
-
-.btn:active{ transform: translateY(1px); }
-
-.btn-primary{
-  background: linear-gradient(135deg, rgba(78,161,255,0.95), rgba(143,186,255,0.70));
-  color: #07101f;
-}
-
-.btn-primary:hover{
-  background: linear-gradient(135deg, rgba(78,161,255,1), rgba(143,186,255,0.85));
-}
-
-.btn-ghost{
-  background: rgba(143,186,255,0.07);
-  border-color: rgba(143,186,255,0.25);
-  color: var(--text);
-}
-
-.btn-ghost:hover{
-  background: rgba(143,186,255,0.12);
-  border-color: rgba(143,186,255,0.35);
-}
-
-.micro-trust{
-  color: var(--muted2);
-  font-size: 0.92rem;
-  margin: 0;
-}
-
-.hero-panel{
-  background: linear-gradient(180deg, rgba(15,26,51,0.65), rgba(12,22,46,0.65));
-  border: 1px solid rgba(31,42,68,0.9);
-  border-radius: 18px;
-  padding: 18px;
-}
-
-.panel-card{
-  height: 100%;
-  border-radius: 14px;
-  padding: 18px;
-  background: rgba(11,19,36,0.55);
-  border: 1px solid rgba(31,42,68,0.75);
-}
-
-.panel-title{
-  margin: 0 0 12px;
-  font-weight: 800;
-}
-
-.panel-list{
-  list-style:none;
-  padding:0;
-  margin:0 0 14px;
-  display:grid;
-  gap: 10px;
-  color: var(--muted);
-}
-
-.dot{
-  display:inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 99px;
-  background: var(--accent2);
-  margin-right: 10px;
-  transform: translateY(-1px);
-}
-
-.panel-foot{
-  margin: 0;
-  color: var(--muted2);
-  font-size: 0.92rem;
-}
-
-.section{
-  padding: 26px 0 70px;
-}
-
-.section-head{
-  margin: 0 0 18px;
-}
-
-.section-head h2{
-  margin: 0 0 8px;
-  font-size: 1.6rem;
-}
-
-.section-head p{
-  margin: 0;
-  color: var(--muted);
-}
-
-.grid{
-  display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-top: 18px;
-}
-
-.card{
-  background: rgba(15,26,51,0.55);
-  border: 1px solid rgba(31,42,68,0.9);
-  border-radius: 16px;
-  padding: 16px;
-}
-
-.card h3{
-  margin: 0 0 8px;
-}
-
-.card p{
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.55;
-}
-
-.section-cta{
-  margin-top: 18px;
-}
-
-.site-footer{
-  border-top: 1px solid var(--line);
-  padding: 22px 0;
-  background: rgba(11,19,36,0.35);
-}
-
-.footer-inner{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.footer-inner p{
-  margin:0;
-}
-
-.muted{
-  color: var(--muted2);
-}
-
-@media (max-width: 900px){
-  .hero-inner{
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 640px){
-  .brand-tag{ display:none; }
-  .grid{ grid-template-columns: 1fr; }
-}
+  <script src="assets/js/site.js"></script>
+</body>
+</html>
