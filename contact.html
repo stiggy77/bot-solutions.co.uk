@@ -4,151 +4,109 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Contact | BOT-Solutions</title>
-  <meta name="description" content="Contact BOT-Solutions for automation, reporting, and support." />
+  <meta name="description" content="Contact BOT-Solutions for automation and reporting." />
 
-  <!-- IMPORTANT: copy the exact stylesheet link you used in index.html and replace the line below -->
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="assets/css/site.css">
 </head>
 
 <body>
+
   <header class="site-header">
-    <div class="container nav-wrap">
+    <div class="container header-bar">
       <a class="brand" href="index.html">
-        <span class="brand-mark" aria-hidden="true">B</span>
-        <span class="brand-text">
-          <span class="brand-name">BOT-Solutions</span>
-          <span class="brand-tag">Business Operations, Technology &amp; Solutions</span>
-        </span>
+        <span class="brand-name">BOT-Solutions</span>
+        <span class="brand-tag">Business Operations, Technology & Solutions</span>
       </a>
 
       <nav class="nav">
         <a href="index.html" class="nav-link">Home</a>
         <a href="services.html" class="nav-link">Services</a>
-        <a href="contact.html" class="nav-link is-active" aria-current="page">Contact</a>
+        <a href="contact.html" class="nav-link is-active">Contact</a>
       </nav>
     </div>
   </header>
 
-  <main class="site-main">
+  <main>
+
     <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-left">
+      <div class="container hero-inner">
+
+        <div>
           <div class="eyebrow">CONTACT</div>
-          <h1 class="hero-title">Tell me what you need, and I’ll reply with next steps.</h1>
-          <p class="hero-sub">
+          <h1>Tell me what you need, and I’ll reply with next steps.</h1>
+          <p class="lede">
             Use the form below. If you’d rather not share details yet, just send a subject and a line or two.
           </p>
 
-          <ul class="hero-bullets">
+          <ul>
             <li>Typical reply: within 1 business day</li>
             <li>No spam, no newsletter, no nonsense</li>
             <li>UK-based, remote-friendly</li>
           </ul>
         </div>
 
-        <aside class="hero-card">
-          <h2 class="card-title">What helps most</h2>
-          <ul class="card-list">
+        <div class="hero-panel">
+          <div class="panel-title">What helps most</div>
+          <ul class="panel-list">
             <li>What system(s) you’re using</li>
             <li>What “good” looks like</li>
             <li>Any deadlines or pain points</li>
           </ul>
-          <div class="card-note">Short is fine — I can ask follow-ups.</div>
-        </aside>
+          <p style="margin-top:10px; color:var(--muted2);">
+            Short is fine — I can ask follow-ups.
+          </p>
+        </div>
+
       </div>
     </section>
 
     <section class="section">
       <div class="container">
-        <div class="contact-grid">
-          <div class="panel">
-            <h2 class="section-title">Send a message</h2>
-            <p class="section-sub">This will become the main contact route (we’ll wire it up next).</p>
 
-            <!--
-              NOTE: GitHub Pages is static, so the form needs a form service to actually email you.
-              We'll plug in Formspree/Netlify/Getform in the next step.
-            -->
-            <form id="contactForm" class="form" method="POST" action="">
-              <div class="field-row">
-                <div class="field">
-                  <label for="name">Name</label>
-                  <input id="name" name="name" type="text" autocomplete="name" placeholder="Your name" />
-                </div>
+        <h2>Send a message</h2>
+        <p class="lede">This will become the main contact route.</p>
 
-                <div class="field">
-                  <label for="email">Email <span class="req">*</span></label>
-                  <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@company.com" />
-                </div>
-              </div>
+        <form>
+          <div style="display:grid; gap:14px; max-width:600px;">
 
-              <div class="field">
-                <label for="subject">Subject <span class="req">*</span></label>
-                <input id="subject" name="subject" type="text" required placeholder="e.g. Slack alerts for failed imports" />
-              </div>
+            <div>
+              <label>Name</label><br>
+              <input type="text" placeholder="Your name" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--line); background:var(--panel); color:var(--text);">
+            </div>
 
-              <div class="field">
-                <label for="message">Message <span class="req">*</span></label>
-                <textarea id="message" name="message" rows="7" required placeholder="A couple of lines is plenty…"></textarea>
-              </div>
+            <div>
+              <label>Email *</label><br>
+              <input type="email" required placeholder="you@company.com" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--line); background:var(--panel); color:var(--text);">
+            </div>
 
-              <!-- lightweight honeypot -->
-              <input type="text" name="company" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+            <div>
+              <label>Subject *</label><br>
+              <input type="text" required placeholder="e.g. Slack alerts for failed imports" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--line); background:var(--panel); color:var(--text);">
+            </div>
 
-              <div class="form-actions">
-                <button class="btn primary" type="submit">Send message</button>
-                <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
-              </div>
-            </form>
+            <div>
+              <label>Message *</label><br>
+              <textarea rows="6" required placeholder="A couple of lines is plenty…" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--line); background:var(--panel); color:var(--text);"></textarea>
+            </div>
+
+            <div>
+              <button type="submit" class="btn btn-primary">Send message</button>
+            </div>
+
           </div>
+        </form>
 
-          <div class="panel subtle">
-            <h2 class="section-title">Other info</h2>
-
-            <div class="info-block">
-              <div class="info-title">Preferred contact</div>
-              <div class="info-text">This form (we’ll route it to <strong>enquiries@bot-solutions.co.uk</strong>).</div>
-            </div>
-
-            <div class="info-block">
-              <div class="info-title">What happens next</div>
-              <div class="info-text">I’ll reply with either (1) a quick fix, (2) questions to scope it, or (3) a short plan and cost.</div>
-            </div>
-
-            <div class="divider"></div>
-
-            <div class="micro-note">
-              If your message vanishes into the void, I promise it wasn’t personal — it was technology doing its thing.
-            </div>
-          </div>
-        </div>
       </div>
     </section>
+
   </main>
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <div class="footer-left">© 2026 BOT-Solutions</div>
-      <div class="footer-right">Automation and reporting that works.</div>
+      <div>© 2026 BOT-Solutions</div>
+      <div>Automation and reporting that works.</div>
     </div>
   </footer>
 
-  <script>
-    // For now this prevents a confusing "nothing happened" moment until we wire up the form endpoint.
-    // Next step: we'll add a real endpoint (Formspree/Netlify/Getform) and this will submit properly.
-    (function () {
-      const form = document.getElementById('contactForm');
-      const status = document.getElementById('formStatus');
-
-      form.addEventListener('submit', function (e) {
-        if (!form.getAttribute('action')) {
-          e.preventDefault();
-          status.textContent = "Form isn’t wired up yet — next step is connecting it to your inbox.";
-          status.classList.add('warn');
-          return;
-        }
-      });
-    })();
-  </script>
 </body>
 </html>
