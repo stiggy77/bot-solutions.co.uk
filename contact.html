@@ -14,14 +14,17 @@
   <header class="site-header">
     <div class="container header-bar">
       <a class="brand" href="index.html">
-        <span class="brand-name">BOT-Solutions</span>
-        <span class="brand-tag">Business Operations, Technology & Solutions</span>
+        <img class="logo-img" src="assets/images/logo.png" alt="BOT-Solutions logo" />
+        <span class="brand-text">
+          <span class="brand-name">BOT-Solutions</span>
+          <span class="brand-tag">Business Operations, Technology &amp; Solutions</span>
+        </span>
       </a>
 
       <nav class="nav">
         <a href="index.html" class="nav-link">Home</a>
         <a href="services.html" class="nav-link">Services</a>
-        <a href="contact.html" class="nav-link is-active">Contact</a>
+        <a href="contact.html" class="nav-link is-active" aria-current="page">Contact</a>
       </nav>
     </div>
   </header>
@@ -52,9 +55,7 @@
             <li>What “good” looks like</li>
             <li>Any deadlines or pain points</li>
           </ul>
-          <p style="margin-top:10px; color:var(--muted2);">
-            Short is fine — I can ask follow-ups.
-          </p>
+          <p class="contact-note">Short is fine — I can ask follow-ups.</p>
         </div>
 
       </div>
@@ -66,31 +67,32 @@
         <h2>Send a message</h2>
         <p class="lede">This will become the main contact route.</p>
 
-        <form>
-          <div style="display:grid; gap:14px; max-width:600px;">
+        <form class="contact-form" method="POST" action="">
+          <div class="form-grid">
 
-            <div>
-              <label>Name</label><br>
-              <input type="text" placeholder="Your name" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--line); background:var(--panel); color:var(--text);">
+            <div class="field">
+              <label for="name">Name</label>
+              <input id="name" name="name" type="text" placeholder="Your name" autocomplete="name">
             </div>
 
-            <div>
-              <label>Email *</label><br>
-              <input type="email" required placeholder="you@company.com" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--line); background:var(--panel); color:var(--text);">
+            <div class="field">
+              <label for="email">Email <span class="req">*</span></label>
+              <input id="email" name="email" type="email" required placeholder="you@domain.co.uk" autocomplete="email">
             </div>
 
-            <div>
-              <label>Subject *</label><br>
-              <input type="text" required placeholder="e.g. Slack alerts for failed imports" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--line); background:var(--panel); color:var(--text);">
+            <div class="field">
+              <label for="subject">Subject <span class="req">*</span></label>
+              <input id="subject" name="subject" type="text" required placeholder="e.g. Slack alerts for failed imports">
             </div>
 
-            <div>
-              <label>Message *</label><br>
-              <textarea rows="6" required placeholder="A couple of lines is plenty…" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--line); background:var(--panel); color:var(--text);"></textarea>
+            <div class="field">
+              <label for="message">Message <span class="req">*</span></label>
+              <textarea id="message" name="message" rows="7" required placeholder="A couple of lines is plenty…"></textarea>
             </div>
 
-            <div>
+            <div class="field">
               <button type="submit" class="btn btn-primary">Send message</button>
+              <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
             </div>
 
           </div>
@@ -107,6 +109,21 @@
       <div>Automation and reporting that works.</div>
     </div>
   </footer>
+
+  <script>
+    (function () {
+      const form = document.querySelector('.contact-form');
+      const status = document.getElementById('formStatus');
+
+      form.addEventListener('submit', function (e) {
+        if (!form.getAttribute('action')) {
+          e.preventDefault();
+          status.textContent = "Form isn’t wired up yet — next step is connecting it to your inbox.";
+          status.className = "form-status warn";
+        }
+      });
+    })();
+  </script>
 
 </body>
 </html>
