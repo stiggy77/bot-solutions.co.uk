@@ -239,3 +239,38 @@ h1{
   .hero-inner{ grid-template-columns:1fr; }
   .grid{ grid-template-columns:1fr; }
 }
+/* Contact form */
+.contact-note{ margin-top:10px; color:var(--muted2); }
+
+.contact-form{ max-width: 640px; }
+.form-grid{ display:grid; gap:14px; }
+
+.field label{ display:block; margin:10px 0 8px; font-weight:600; }
+.req{ color: var(--accent); }
+
+.contact-form input,
+.contact-form textarea{
+  width:100%;
+  box-sizing:border-box;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background: rgba(15,26,51,0.55);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+}
+
+.contact-form textarea{
+  resize: vertical;   /* keeps width aligned */
+  min-height: 160px;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder{
+  color: rgba(203,213,225,0.55);
+}
+
+.form-status{ margin-top:10px; color: var(--muted2); }
+.form-status.warn{ color: var(--accent); }
