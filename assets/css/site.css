@@ -274,3 +274,16 @@ h1{
 
 .form-status{ margin-top:10px; color: var(--muted2); }
 .form-status.warn{ color: var(--accent); }
+/* Fix Chrome autofill background/colour */
+.contact-form input:-webkit-autofill,
+.contact-form textarea:-webkit-autofill,
+.contact-form input:-webkit-autofill:hover,
+.contact-form textarea:-webkit-autofill:hover,
+.contact-form input:-webkit-autofill:focus,
+.contact-form textarea:-webkit-autofill:focus{
+  -webkit-text-fill-color: var(--text) !important;
+  caret-color: var(--text);
+  transition: background-color 999999s ease-in-out 0s;
+  box-shadow: 0 0 0px 1000px rgba(15,26,51,0.55) inset !important;
+  border: 1px solid var(--line);
+}
