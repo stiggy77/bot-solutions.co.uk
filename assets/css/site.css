@@ -9,7 +9,7 @@
   --accent2:#4ea1ff;
 }
 
-/* Ensure background always fills page */
+/* Background fills full page */
 html {
   min-height:100%;
   background:
@@ -56,16 +56,20 @@ body{
   align-items:center;
 }
 
-.brand-mark{
-  width:42px;
+.logo-img{
   height:42px;
-  border-radius:10px;
-  background:linear-gradient(135deg,#4ea1ff,#8fbaff);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-  color:#07101f;
+  width:auto;
+  border-radius:6px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.logo-img:hover{
+  transform:scale(1.05);
+  box-shadow:0 8px 20px rgba(78,161,255,.35);
+}
+
+.brand-name{
+  font-weight:600;
 }
 
 .brand-tag{
@@ -97,6 +101,7 @@ body{
 
 /* Hero */
 .hero{
+  position:relative;
   padding:60px 0 30px;
 }
 
@@ -104,6 +109,18 @@ body{
   display:grid;
   grid-template-columns:1.2fr 0.8fr;
   gap:30px;
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  width:600px;
+  height:600px;
+  top:-200px;
+  left:-150px;
+  background:radial-gradient(circle, rgba(78,161,255,0.25), transparent 70%);
+  filter:blur(80px);
+  z-index:-1;
 }
 
 .eyebrow{
@@ -171,14 +188,9 @@ h1{
 .panel-title{ font-weight:700; margin-bottom:10px; }
 
 .panel-list{
-  list-style:none;
-  padding:0;
-  margin:0 0 10px;
-}
-
-.panel-list li{
-  margin-bottom:6px;
-  color:var(--muted);
+  list-style:disc;
+  padding-left:18px;
+  margin:0;
 }
 
 /* Cards */
@@ -227,36 +239,3 @@ h1{
   .hero-inner{ grid-template-columns:1fr; }
   .grid{ grid-template-columns:1fr; }
 }
-/* Hero glow effect */
-
-.hero {
-  position: relative;
-  z-index: 1;
-}
-
-.hero::before {
-  content: "";
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  top: -200px;
-  left: -150px;
-  background: radial-gradient(circle, rgba(78,161,255,0.25), transparent 70%);
-  filter: blur(80px);
-  z-index: -1;
-  pointer-events: none;
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  bottom: -200px;
-  right: -150px;
-  background: radial-gradient(circle, rgba(143,186,255,0.18), transparent 70%);
-  filter: blur(80px);
-  z-index: -1;
-  pointer-events: none;
-}
-
