@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
@@ -10,6 +11,7 @@
   <meta name="description" content="Contact BOT-Solutions for automation and reporting." />
 
   <link rel="stylesheet" href="assets/css/site.css">
+
 </head>
 
 <body>
@@ -166,7 +168,7 @@
     })();
   </script>
 
-  <!-- Contact form (AJAX) -->
+  <!-- Contact form (AJAX + Success Popup) -->
   <script>
     (function () {
       const form = document.getElementById('contactForm');
@@ -174,6 +176,104 @@
       const sendBtn = document.getElementById('sendBtn');
 
       if (!form || !status) return;
+
+      // Inject minimal CSS for the popup
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes botsModalIn {
+          from { opacity: 0; transform: translateY(10px) scale(0.98); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .bots-modal-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.6);
+          display: none;
+          align-items: center;
+          justify-content: center;
+          z-index: 9999;
+          padding: 16px;
+        }
+        .bots-modal {
+          width: 100%;
+          max-width: 440px;
+          background: rgba(15, 23, 42, 0.98);
+          color: #fff;
+          border-radius: 14px;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+          border: 1px solid rgba(255,255,255,0.10);
+          padding: 22px 22px;
+          animation: botsModalIn 0.18s ease-out;
+        }
+        .bots-modal h3 {
+          margin: 0 0 8px 0;
+          font-size: 18px;
+          letter-spacing: 0.2px;
+        }
+        .bots-modal p {
+          margin: 0 0 14px 0;
+          opacity: 0.95;
+          line-height: 1.4;
+        }
+        .bots-modal .bots-modal-actions {
+          display: flex;
+          justify-content: center;
+          gap: 10px;
+          margin-top: 8px;
+        }
+        .bots-modal button {
+          cursor: pointer;
+          border: 1px solid rgba(255,255,255,0.18);
+          background: rgba(255,255,255,0.06);
+          color: #fff;
+          border-radius: 10px;
+          padding: 10px 14px;
+          font: inherit;
+        }
+        .bots-modal button:hover {
+          background: rgba(255,255,255,0.10);
+        }
+      `;
+      document.head.appendChild(style);
+
+      // Create popup DOM
+      const overlay = document.createElement('div');
+      overlay.className = 'bots-modal-overlay';
+      overlay.innerHTML = `
+        <div class="bots-modal" role="dialog" aria-modal="true" aria-labelledby="botsModalTitle">
+          <h3 id="botsModalTitle">Message sent</h3>
+          <p>Sent. Thanks — I’ll get back to you soon.</p>
+          <div class="bots-modal-actions">
+            <button type="button" id="botsModalClose">Close</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
+      const closeBtn = overlay.querySelector('#botsModalClose');
+
+      function openModal() {
+        overlay.style.display = 'flex';
+        // Auto close after 3 seconds
+        window.setTimeout(closeModal, 3000);
+      }
+
+      function closeModal() {
+        overlay.style.display = 'none';
+      }
+
+      // Close on button
+      closeBtn.addEventListener('click', closeModal);
+
+      // Close when clicking outside modal
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeModal();
+      });
+
+      // Close on ESC
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeModal();
+      });
 
       function setBusy(isBusy) {
         if (!sendBtn) return;
@@ -205,6 +305,7 @@
             form.reset();
             status.textContent = "Sent. Thanks — I’ll get back to you soon.";
             status.className = "form-status ok";
+            openModal();
           } else {
             status.textContent = "Couldn’t send that just now. Please try again.";
             status.className = "form-status warn";
