@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>SLA Monitoring Structure for Application Support | BOT-Solutions</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+        content="A practical structure for SLA monitoring in application support: definitions, SLOs, measurement, logging standards, alert routing, reporting cadence, and escalation patterns.">
+
+    <link rel="canonical" href="https://bot-solutions.co.uk/sla-monitoring-structure.html">
+
+    <link rel="stylesheet" href="assets/css/site.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container header-bar">
+
+            <a class="brand" href="index.html">
+                <img src="images/logo.png" alt="BOT-Solutions logo" class="logo-img">
+                <div>
+                    <div class="brand-name">BOT-Solutions</div>
+                    <div class="brand-tag">Business Operations, Technology &amp; Solutions</div>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="services.html">Services</a>
+                <a class="nav-link is-active" href="resources.html">Resources</a>
+                <a class="nav-link" href="pricing.html">Pricing</a>
+                <a class="nav-link" href="contact.html">Contact</a>
+            </nav>
+
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">
+                🌙 Dark
+            </button>
+
+        </div>
+    </header>
+
+    <main>
+
+        <section class="hero">
+            <div class="container hero-inner">
+
+                <div>
+                    <div class="eyebrow">Guide • SLA • Monitoring</div>
+
+                    <h1>SLA monitoring structure that doesn’t turn into spreadsheet theatre</h1>
+
+                    <p class="lede">
+                        A practical structure for tracking SLAs and operational health without creating noise.
+                        This is aimed at application admins and support leads who need reliable measurement,
+                        clear reporting, and sensible escalation.
+                    </p>
+
+                    <div class="cta-row">
+                        <a class="btn btn-primary" href="contact.html">Discuss a monitoring build →</a>
+                        <a class="btn btn-ghost" href="services.html">View services</a>
+                    </div>
+
+                    <ul class="panel-list">
+                        <li>SLA definitions that can be measured</li>
+                        <li>Monitoring, logging and alert routing standards</li>
+                        <li>Reporting cadence and escalation patterns</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="panel-title">What you’ll leave with</div>
+                    <ul class="panel-list">
+                        <li>A clean SLA/SLO model</li>
+                        <li>Event categories and severity levels</li>
+                        <li>Alert rules that reduce noise</li>
+                        <li>Weekly/monthly reporting templates</li>
+                    </ul>
+                    <p class="lede">Useful in small teams. Scales in larger ones.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>1) Start with the measurement model</h2>
+                <p class="lede">
+                    Most “SLA reporting” fails because the definition cannot be measured consistently.
+                    Aim for simple, trackable metrics that map to customer impact and operational effort.
+                </p>
+
+                <div class="grid">
+
+                    <div class="card">
+                        <h3>SLA (contract)</h3>
+                        <p>
+                            External commitment. Usually phrased in availability, response times,
+                            restoration time, or support response.
+                        </p>
+                    </div>
+
+                    <div class="card">
+                        <h3>SLO (operational target)</h3>
+                        <p>
+                            Your internal target that makes the SLA achievable.
+                            Usually tighter than the SLA.
+                        </p>
+                    </div>
+
+                    <div class="card">
+                        <h3>SLI (measurement)</h3>
+                        <p>
+                            The actual measurable indicator (e.g. “API 5xx rate”, “job success rate”,
+                            “P95 response time”).
+                        </p>
+                    </div>
+
+                </div>
+
+                <p class="lede">
+                    If you only do one thing: define the SLIs clearly and write down how they’re calculated.
+                    That stops disputes later.
+                </p>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>2) Define what you monitor (and what you don’t)</h2>
+                <p class="lede">
+                    Build a monitoring catalogue. Keep it short and intentional.
+                    The goal is reliable detection of real issues, not 600 “checks” nobody trusts.
+                </p>
+
+                <div class="card">
+                    <h3>Monitoring catalogue (example)</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+Category: Availability
+  - Public website / portal reachable (HTTP 200)
+  - Core API health endpoint (HTTP 200 + latency threshold)
+  - Auth provider / SSO reachable
+
+Category: Data pipelines & jobs
+  - Scheduled job success rate (daily / hourly)
+  - Job runtime thresholds (duration anomaly detection)
+  - Import queues / backlog thresholds
+
+Category: Data quality
+  - Null / blank critical fields
+  - Spike in failed lookups / validation failures
+  - Duplicate record detection (key tables)
+
+Category: Dependencies
+  - Database connectivity (lightweight read query)
+  - Queue / message broker connectivity
+  - Storage availability / latency
+
+Category: Support operations
+  - Ticket inflow / backlog thresholds
+  - SLA breach risk (ageing tickets)
+</pre>
+                </div>
+
+                <p class="lede">
+                    Monitoring should reflect the “things that break your week”, not just what’s easy to check.
+                </p>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>3) Standardise severity and routing</h2>
+                <p class="lede">
+                    Severity is about impact and urgency. Routing is about who needs to know.
+                    Without standards, every alert becomes “high priority” and nobody believes any of them.
+                </p>
+
+                <div class="grid">
+
+                    <div class="card">
+                        <h3>P1 – Service down</h3>
+                        <p>Outage or major functionality unavailable. Immediate action. Clear comms.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>P2 – Degraded / risk of breach</h3>
+                        <p>Partial outage, serious performance issue, or breach likely without action.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>P3 – Operational issue</h3>
+                        <p>Failures that don’t impact users immediately but need fixing (e.g. job retries).</p>
+                    </div>
+
+                </div>
+
+                <div class="card" style="margin-top:16px;">
+                    <h3>Routing rules (simple version)</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+P1 -> On-call / primary responder + incident channel + comms lead
+P2 -> Support lead + incident channel (no paging unless time-critical)
+P3 -> Ops channel + ticket created (no interrupt unless repeated)
+</pre>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>4) Logging standards that make alerts believable</h2>
+                <p class="lede">
+                    Alert quality depends on log quality. Standardise “what a job run looks like” and
+                    “what an error looks like”, then route from that.
+                </p>
+
+                <div class="card">
+                    <h3>Minimum logging fields (recommended)</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+Timestamp (UTC/local)
+Environment (Prod/UAT/etc)
+System / Component
+Job name (if applicable)
+Correlation ID / Run ID
+Level (INFO/WARN/ERROR)
+Message
+Key metrics (rows processed, duration, counts, identifiers)
+Outcome (Success/Failed/Partial/Retry)
+</pre>
+                </div>
+
+                <p class="lede">
+                    A reliable pattern is: jobs write structured logs → monitoring checks read logs →
+                    alerts are raised only for meaningful errors.
+                </p>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>5) Reporting cadence</h2>
+                <p class="lede">
+                    Monitoring is real-time. SLA reporting is periodic. Keep both.
+                    A good cadence removes surprises and shows improvement over time.
+                </p>
+
+                <div class="grid">
+
+                    <div class="card">
+                        <h3>Daily</h3>
+                        <p>Job success summary, backlog thresholds, failed imports, key error spikes.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Weekly</h3>
+                        <p>Trends, top recurring issues, breach risks, “what changed” notes.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Monthly</h3>
+                        <p>SLA/SLO summary, incidents, availability, performance, roadmap actions.</p>
+                    </div>
+
+                </div>
+
+                <div class="card" style="margin-top:16px;">
+                    <h3>Monthly SLA summary (template)</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+1) SLA overview
+   - Availability %
+   - Response / restore times
+   - Breaches (count + reasons)
+
+2) Incidents
+   - P1/P2 count
+   - Root cause themes
+   - Preventative actions
+
+3) Operational health
+   - Job success rate
+   - Data quality metrics
+   - Support backlog trends
+
+4) Actions next month
+   - 3–5 specific improvements
+   - Owners + target dates
+</pre>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>6) Common failure modes</h2>
+
+                <div class="grid">
+
+                    <div class="card">
+                        <h3>Measuring the wrong thing</h3>
+                        <p>If it doesn’t map to impact, it won’t matter when it matters.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Alerting on symptoms</h3>
+                        <p>Alert on outcomes and thresholds, not every minor warning.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>No ownership</h3>
+                        <p>If “who responds” is unclear, the alert is just a notification.</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>Want this implemented in your environment?</h2>
+                <p class="lede">
+                    If you want structured monitoring without alert noise, we can build the catalogue,
+                    logging standards, routing rules, and reporting output around your actual systems.
+                </p>
+
+                <div style="margin-top:25px;">
+                    <a class="btn btn-primary" href="contact.html">Contact BOT-Solutions →</a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>© 2026 BOT-Solutions</div>
+            <div>Automation and reporting that works.</div>
+        </div>
+    </footer>
+
+    <!-- Theme Toggle Script (same as index) -->
+    <script>
+        (function () {
+            const root = document.documentElement;
+            const toggle = document.getElementById("themeToggle");
+
+            if (!toggle) return;
+
+            const savedTheme = localStorage.getItem("theme");
+
+            if (savedTheme) {
+                if (savedTheme === "light") root.setAttribute("data-theme", "light");
+                else root.removeAttribute("data-theme");
+            } else {
+                const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+                if (!prefersDark) root.setAttribute("data-theme", "light");
+            }
+
+            function updateButton() {
+                const current = root.getAttribute("data-theme");
+                toggle.textContent = current === "light" ? "🌞 Light" : "🌙 Dark";
+            }
+
+            updateButton();
+
+            toggle.addEventListener("click", function () {
+                const current = root.getAttribute("data-theme");
+                const newTheme = current === "light" ? "dark" : "light";
+
+                if (newTheme === "light") {
+                    root.setAttribute("data-theme", "light");
+                    localStorage.setItem("theme", "light");
+                } else {
+                    root.removeAttribute("data-theme");
+                    localStorage.setItem("theme", "dark");
+                }
+
+                updateButton();
+            });
+        })();
+    </script>
+
+    <!-- Chatbase Widget -->
+    <script>
+        (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "ALpjA7Pu9YfymHwmVUs6-"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
+    </script>
+
+</body>
+
+</html>
