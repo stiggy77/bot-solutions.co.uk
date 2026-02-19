@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
@@ -11,7 +10,6 @@
   <meta name="description" content="Contact BOT-Solutions for automation and reporting." />
 
   <link rel="stylesheet" href="assets/css/site.css">
-
 </head>
 
 <body>
@@ -82,7 +80,7 @@
         <h2>Send a message</h2>
         <p class="lede">This will become the main contact route.</p>
 
-        <form class="contact-form" method="POST" action="https://formspree.io/f/xdallaej">
+        <form id="contactForm" class="contact-form" method="POST" action="https://formspree.io/f/xdallaej">
           <div class="form-grid">
 
             <div class="field">
@@ -108,7 +106,7 @@
             </div>
 
             <div class="field">
-              <button type="submit" class="btn btn-primary">Send message</button>
+              <button id="sendBtn" type="submit" class="btn btn-primary">Send message</button>
               <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
             </div>
 
@@ -168,17 +166,54 @@
     })();
   </script>
 
-  <!-- Contact form placeholder script -->
+  <!-- Contact form (AJAX) -->
   <script>
     (function () {
-      const form = document.querySelector('.contact-form');
+      const form = document.getElementById('contactForm');
       const status = document.getElementById('formStatus');
+      const sendBtn = document.getElementById('sendBtn');
 
-      form.addEventListener('submit', function (e) {
-        if (!form.getAttribute('action')) {
-          e.preventDefault();
+      if (!form || !status) return;
+
+      function setBusy(isBusy) {
+        if (!sendBtn) return;
+        sendBtn.disabled = isBusy;
+        sendBtn.textContent = isBusy ? "Sending…" : "Send message";
+      }
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        if (!form.action) {
           status.textContent = "Form isn’t wired up yet — next step is connecting it to your inbox.";
           status.className = "form-status warn";
+          return;
+        }
+
+        status.textContent = "";
+        status.className = "form-status";
+        setBusy(true);
+
+        try {
+          const res = await fetch(form.action, {
+            method: "POST",
+            body: new FormData(form),
+            headers: { "Accept": "application/json" }
+          });
+
+          if (res.ok) {
+            form.reset();
+            status.textContent = "Sent. Thanks — I’ll get back to you soon.";
+            status.className = "form-status ok";
+          } else {
+            status.textContent = "Couldn’t send that just now. Please try again.";
+            status.className = "form-status warn";
+          }
+        } catch (err) {
+          status.textContent = "Network hiccup — please try again.";
+          status.className = "form-status warn";
+        } finally {
+          setBusy(false);
         }
       });
     })();
