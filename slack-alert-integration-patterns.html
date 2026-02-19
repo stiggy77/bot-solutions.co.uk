@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Slack &amp; Alert Integration Patterns | BOT-Solutions</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+        content="Clean patterns for integrating Slack and email notifications into automation workflows without creating alert noise: routing, severity, deduplication, batching, escalation, and runbook-ready messages.">
+
+    <link rel="canonical" href="https://bot-solutions.co.uk/slack-alert-integration-patterns.html">
+
+    <link rel="stylesheet" href="assets/css/site.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container header-bar">
+
+            <a class="brand" href="index.html">
+                <img src="images/logo.png" alt="BOT-Solutions logo" class="logo-img">
+                <div>
+                    <div class="brand-name">BOT-Solutions</div>
+                    <div class="brand-tag">Business Operations, Technology &amp; Solutions</div>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="services.html">Services</a>
+                <a class="nav-link is-active" href="resources.html">Resources</a>
+                <a class="nav-link" href="pricing.html">Pricing</a>
+                <a class="nav-link" href="contact.html">Contact</a>
+            </nav>
+
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">
+                🌙 Dark
+            </button>
+
+        </div>
+    </header>
+
+    <main>
+
+        <section class="hero">
+            <div class="container hero-inner">
+
+                <div>
+                    <div class="eyebrow">Guide • Alerts • Slack • Email</div>
+
+                    <h1>Slack &amp; alert integration patterns that don’t create alert noise</h1>
+
+                    <p class="lede">
+                        Slack is brilliant for operational awareness… right up until it becomes a wall of
+                        “FYI” messages nobody reads. This guide shows clean, repeatable patterns for
+                        integrating Slack and email notifications into automation workflows while keeping
+                        alerts actionable and trustable.
+                    </p>
+
+                    <div class="cta-row">
+                        <a class="btn btn-primary" href="contact.html">Discuss alerting patterns →</a>
+                        <a class="btn btn-ghost" href="services.html">View services</a>
+                    </div>
+
+                    <ul class="panel-list">
+                        <li>Routing and severity rules that teams actually follow</li>
+                        <li>Deduplication, batching and escalation without spam</li>
+                        <li>Message templates with runbook-ready context</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="panel-title">What you’ll leave with</div>
+                    <ul class="panel-list">
+                        <li>A simple alert taxonomy (P1–P3)</li>
+                        <li>A Slack channel strategy that scales</li>
+                        <li>Noise controls (rate limit, grouping, suppression)</li>
+                        <li>Templates for Slack + email</li>
+                    </ul>
+                    <p class="lede">More signal. Less “who invited this bot?”.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>1) Decide what Slack is for</h2>
+                <p class="lede">
+                    The biggest mistake is trying to use Slack as a dumping ground for every notification.
+                    Use Slack for time-sensitive awareness and coordination. Use email for summary and audit.
+                    Use tickets for ownership and tracking.
+                </p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Slack</h3>
+                        <p>Fast, visible, good for coordination. Best for actionable alerts and incident comms.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Email</h3>
+                        <p>Good for summaries, daily/weekly digests, and “paper trail” reporting.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Tickets</h3>
+                        <p>Best for ownership: who is doing what, by when, and why it matters.</p>
+                    </div>
+                </div>
+
+                <p class="lede">
+                    If a message needs a human response soon, it probably belongs in Slack.
+                    If it’s information only, it probably belongs in a digest.
+                </p>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>2) Standardise severity and routing</h2>
+                <p class="lede">
+                    Severity is about impact and urgency. Routing is about who needs to know.
+                    Without standards, everything becomes “urgent”, and nothing is.
+                </p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>P1 – Critical</h3>
+                        <p>Service down, data loss risk, security-impacting events. Immediate action.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>P2 – Significant</h3>
+                        <p>Degraded service, breach risk, repeated failures. Action required soon.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>P3 – Operational</h3>
+                        <p>Non-urgent issues: retried jobs, minor failures, hygiene tasks. Track, don’t interrupt.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:16px;">
+                    <h3>Routing rules (practical defaults)</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+P1 -> #incidents + on-call ping + status/comms owner
+P2 -> #ops-alerts (no paging unless time-bound) + ticket created
+P3 -> #ops (or digest) + ticket only if repeated / trending
+</pre>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>3) Build a simple channel strategy</h2>
+                <p class="lede">
+                    One channel for everything becomes unusable. Too many channels becomes ignored.
+                    Aim for a small, intentional set that matches how your team works.
+                </p>
+
+                <div class="card">
+                    <h3>Recommended channel set</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+#incidents      - P1 coordination (threaded updates, clear owners)
+#ops-alerts     - P2 alerts that need attention
+#ops            - P3 operational messages + planned works
+#releases       - deployments + change notices (often P2 context)
+#daily-summary  - bot-only daily digest (optional)
+</pre>
+                </div>
+
+                <p class="lede">
+                    Keep incident updates in threads. Channels stay readable, and history stays useful.
+                </p>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>4) Make alerts actionable (message content matters)</h2>
+                <p class="lede">
+                    An alert is only as good as the first 10 seconds after someone reads it.
+                    If the message doesn’t say what happened, where, and what to do next — it’s just noise.
+                </p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Minimum content</h3>
+                        <p>What broke, where it broke, impact, when it started, and current state.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Context</h3>
+                        <p>Environment, component, job/run ID, correlation ID, and key metrics.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Next action</h3>
+                        <p>Runbook link, owner hint, and whether it’s auto-retrying or needs manual intervention.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:16px;">
+                    <h3>Slack alert template (copy/paste pattern)</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+[P2] Job import failures increasing (Prod)
+• System: Plus Importer
+• Signal: 18 failures in 15m (threshold: 5)
+• Impact: Imports delayed, SLA breach risk in ~2h
+• Evidence: RunIds: 8f2a..., 1c9b..., 77d0...
+• Last success: 14:05
+• Auto-retry: Enabled (3 attempts) - currently failing
+
+Next:
+1) Check queue backlog: /dashboards/imports
+2) Review latest error log: /logs/importer?runId=...
+3) If DB timeouts: see runbook /kb/importer-timeouts
+Owner: @oncall
+</pre>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>5) Noise control: dedupe, group, suppress</h2>
+                <p class="lede">
+                    Most alert spam comes from the same failure repeating.
+                    The fix is almost always: dedupe + grouping + sensible suppression windows.
+                </p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Deduplication key</h3>
+                        <p>
+                            Create a stable key like:
+                            <span style="opacity:.9;">env + system + check + entity</span>
+                            (e.g. Prod + Importer + JobFail + TrustId).
+                        </p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Suppression window</h3>
+                        <p>
+                            Once fired, suppress duplicates for a time window (e.g. 15–30 minutes),
+                            unless severity escalates.
+                        </p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Grouping</h3>
+                        <p>
+                            Combine similar alerts into one message with counts and examples.
+                            People can handle “18 failures” better than 18 messages.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:16px;">
+                    <h3>Example grouping logic</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+Rule: If &gt;= 5 failures in 10 minutes for same component
+  - Post one alert with count + top 3 error reasons
+  - Include 3 sample IDs for investigation
+  - Suppress repeats for 20 minutes
+  - Escalate to P1 if failures continue for 60 minutes or SLA breach imminent
+</pre>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>6) Escalation patterns that work</h2>
+                <p class="lede">
+                    Escalation should be predictable. People should know what happens next without a meeting
+                    about what happens next.
+                </p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Time-based escalation</h3>
+                        <p>Example: P2 alert unresolved after 30 minutes → ping on-call and raise priority.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Impact-based escalation</h3>
+                        <p>Example: error rate rising or user-facing impact confirmed → P1 and incident channel.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Trend-based escalation</h3>
+                        <p>Example: same alert repeats 3 days this week → ticket + “prevent recurrence” task.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:16px;">
+                    <h3>Escalation rules (simple defaults)</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+P3 (repeat)  -> Create/append ticket + add to weekly review
+P2 (30m)     -> Ping on-call + ask for acknowledgement
+P2 (60m)     -> Escalate to P1 if breach/impact likely
+P1           -> Incident channel + owner + update cadence (e.g. every 15m)
+</pre>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>7) Email: use it for digests and audit, not panic</h2>
+                <p class="lede">
+                    Email is best when it summarises. Avoid one-email-per-event unless it’s compliance-critical.
+                    Instead, send daily/weekly digests and incident summaries.
+                </p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Daily digest</h3>
+                        <p>Job success rate, failures grouped by cause, top 5 recurring issues, backlog.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Weekly ops review</h3>
+                        <p>Trends, what changed, recurring alerts, and actions to prevent repeats.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Incident summary</h3>
+                        <p>P1/P2 narrative: timeline, root cause, impact, and preventative actions.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:16px;">
+                    <h3>Daily digest template</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+Daily Ops Digest (Prod)
+
+1) Jobs
+- Total runs: 312
+- Success: 308
+- Failed: 4 (grouped)
+  • Timeout to DB (3)
+  • Validation error (1)
+
+2) Imports
+- Backlog peak: 1,240 (09:40) - now 110
+- Oldest item age: 18m
+
+3) Alerts summary
+- P2 fired: 2 (resolved)
+- P3 fired: 6 (3 unique keys)
+
+4) Actions
+- Ticket OPS-142: DB timeout mitigation (owner: Claire) - due Fri
+- Ticket OPS-145: Validation rules update (owner: Stephen) - due Wed
+</pre>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>8) Common failure modes (and quick fixes)</h2>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>One event = one message</h3>
+                        <p>Fix: group by key, post counts + examples, suppress repeats.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>No ownership</h3>
+                        <p>Fix: routing rules, on-call mention only where needed, tickets for P2/P3.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Missing context</h3>
+                        <p>Fix: include environment, component, run ID, last success, and runbook link.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>Want this implemented in your environment?</h2>
+                <p class="lede">
+                    If your Slack currently looks like a slot machine, we can help.
+                    We’ll define alert keys, grouping rules, routing, and message templates that fit
+                    your jobs, databases, and support process — without breaking what already works.
+                </p>
+
+                <div style="margin-top:25px;">
+                    <a class="btn btn-primary" href="contact.html">Contact BOT-Solutions →</a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>© 2026 BOT-Solutions</div>
+            <div>Automation and reporting that works.</div>
+        </div>
+    </footer>
+
+    <!-- Theme Toggle Script (same as index) -->
+    <script>
+        (function () {
+            const root = document.documentElement;
+            const toggle = document.getElementById("themeToggle");
+
+            if (!toggle) return;
+
+            const savedTheme = localStorage.getItem("theme");
+
+            if (savedTheme) {
+                if (savedTheme === "light") root.setAttribute("data-theme", "light");
+                else root.removeAttribute("data-theme");
+            } else {
+                const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+                if (!prefersDark) root.setAttribute("data-theme", "light");
+            }
+
+            function updateButton() {
+                const current = root.getAttribute("data-theme");
+                toggle.textContent = current === "light" ? "🌞 Light" : "🌙 Dark";
+            }
+
+            updateButton();
+
+            toggle.addEventListener("click", function () {
+                const current = root.getAttribute("data-theme");
+                const newTheme = current === "light" ? "dark" : "light";
+
+                if (newTheme === "light") {
+                    root.setAttribute("data-theme", "light");
+                    localStorage.setItem("theme", "light");
+                } else {
+                    root.removeAttribute("data-theme");
+                    localStorage.setItem("theme", "dark");
+                }
+
+                updateButton();
+            });
+        })();
+    </script>
+
+    <!-- Chatbase Widget -->
+    <script>
+        (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "ALpjA7Pu9YfymHwmVUs6-"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
+    </script>
+
+</body>
+
+</html>
