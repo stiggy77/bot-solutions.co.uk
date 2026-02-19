@@ -484,6 +484,15 @@ a.card-link .card,
   text-overflow: ellipsis;
 }
 
+a.card-link:focus {
+  outline: 2px solid rgba(78, 161, 255, 0.35);
+  outline-offset: 4px;
+}
+
+:root[data-theme="light"] a.card-link:focus {
+  outline: 2px solid rgba(37, 99, 235, 0.25);
+}
+
 /* =========================
    FOOTER
    ========================= */
