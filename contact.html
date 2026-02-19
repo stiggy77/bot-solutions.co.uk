@@ -1,12 +1,11 @@
 <!doctype html>
-
 <html lang="en">
 
 <head>
 
   <meta charset="utf-8" />
-
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+
   <title>Contact | BOT-Solutions</title>
   <link rel="icon" type="image/png" href="favicon.png">
   <meta name="description" content="Contact BOT-Solutions for automation and reporting." />
@@ -17,241 +16,172 @@
 
 <body>
 
-
-
   <header class="site-header">
-
     <div class="container header-bar">
 
       <a class="brand" href="index.html">
-
         <img src="images/logo.png" alt="BOT-Solutions logo" class="logo-img">
-
         <div>
-
           <div class="brand-name">BOT-Solutions</div>
-
-          <div class="brand-tag">Business Operations, Technology & Solutions</div>
-
+          <div class="brand-tag">Business Operations, Technology &amp; Solutions</div>
         </div>
-
       </a>
 
-
-
-
-
       <nav class="nav">
-
         <a href="index.html" class="nav-link">Home</a>
-
         <a href="services.html" class="nav-link">Services</a>
-
         <a href="pricing.html" class="nav-link">Pricing</a>
-
         <a href="contact.html" class="nav-link is-active" aria-current="page">Contact</a>
-
       </nav>
 
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">
+        🌙 Dark
+      </button>
+
     </div>
-
   </header>
-
-
 
   <main>
 
-
-
     <section class="hero">
-
       <div class="container hero-inner">
 
-
-
         <div>
-
           <div class="eyebrow">CONTACT</div>
 
           <h1>Tell me what you need, and I’ll reply with next steps.</h1>
 
           <p class="lede">
-
             Use the form below. If you’d rather not share details yet, just send a subject and a line or two.
-
           </p>
 
-
-
           <ul>
-
             <li>Typical reply: within 1 business day</li>
-
             <li>No spam, no newsletter, no nonsense</li>
-
             <li>UK-based, remote-friendly</li>
-
           </ul>
-
         </div>
-
-
 
         <div class="hero-panel">
-
           <div class="panel-title">What helps most</div>
-
           <ul class="panel-list">
-
             <li>What system(s) you’re using</li>
-
             <li>What “good” looks like</li>
-
             <li>Any deadlines or pain points</li>
-
           </ul>
-
           <p class="contact-note">Short is fine — I can ask follow-up questions.</p>
-
         </div>
 
-
-
       </div>
-
     </section>
-
-
 
     <section class="section">
-
       <div class="container">
 
-
-
         <h2>Send a message</h2>
-
         <p class="lede">This will become the main contact route.</p>
 
-
-
         <form class="contact-form" method="POST" action="">
-
           <div class="form-grid">
 
-
-
             <div class="field">
-
               <label for="name">Name</label>
-
               <input id="name" name="name" type="text" placeholder="Your name" autocomplete="name">
-
             </div>
 
-
-
             <div class="field">
-
               <label for="email">Email <span class="req">*</span></label>
-
               <input id="email" name="email" type="email" required placeholder="you@domain.co.uk" autocomplete="email">
-
             </div>
 
-
-
             <div class="field">
-
               <label for="subject">Subject <span class="req">*</span></label>
-
               <input id="subject" name="subject" type="text" required
                 placeholder="e.g. Slack alerts for failed imports">
-
             </div>
 
-
-
             <div class="field">
-
               <label for="message">Message <span class="req">*</span></label>
-
               <textarea id="message" name="message" rows="7" required
                 placeholder="A couple of lines is plenty…"></textarea>
-
             </div>
-
-
 
             <div class="field">
-
               <button type="submit" class="btn btn-primary">Send message</button>
-
               <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
-
             </div>
 
-
-
           </div>
-
         </form>
 
-
-
       </div>
-
     </section>
-
-
 
   </main>
 
-
-
   <footer class="site-footer">
-
     <div class="container footer-inner">
-
       <div>© 2026 BOT-Solutions</div>
-
       <div>Automation and reporting that works.</div>
-
     </div>
-
   </footer>
 
-
-
+  <!-- Theme Script -->
   <script>
-
     (function () {
+      const root = document.documentElement;
+      const toggle = document.getElementById("themeToggle");
+      if (!toggle) return;
 
-      const form = document.querySelector('.contact-form');
+      const savedTheme = localStorage.getItem("theme");
 
-      const status = document.getElementById('formStatus');
+      if (savedTheme) {
+        if (savedTheme === "light") root.setAttribute("data-theme", "light");
+        else root.removeAttribute("data-theme");
+      } else {
+        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (!prefersDark) root.setAttribute("data-theme", "light");
+      }
 
+      function updateButton() {
+        const current = root.getAttribute("data-theme");
+        toggle.textContent = current === "light" ? "🌞 Light" : "🌙 Dark";
+      }
 
+      updateButton();
 
-      form.addEventListener('submit', function (e) {
+      toggle.addEventListener("click", function () {
+        const current = root.getAttribute("data-theme");
+        const newTheme = current === "light" ? "dark" : "light";
 
-        if (!form.getAttribute('action')) {
-
-          e.preventDefault();
-
-          status.textContent = "Form isn’t wired up yet — next step is connecting it to your inbox.";
-
-          status.className = "form-status warn";
-
+        if (newTheme === "light") {
+          root.setAttribute("data-theme", "light");
+          localStorage.setItem("theme", "light");
+        } else {
+          root.removeAttribute("data-theme");
+          localStorage.setItem("theme", "dark");
         }
 
+        updateButton();
       });
-
     })();
-
   </script>
 
+  <!-- Contact form placeholder script -->
+  <script>
+    (function () {
+      const form = document.querySelector('.contact-form');
+      const status = document.getElementById('formStatus');
 
+      form.addEventListener('submit', function (e) {
+        if (!form.getAttribute('action')) {
+          e.preventDefault();
+          status.textContent = "Form isn’t wired up yet — next step is connecting it to your inbox.";
+          status.className = "form-status warn";
+        }
+      });
+    })();
+  </script>
 
 </body>
 
