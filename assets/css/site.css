@@ -376,10 +376,34 @@ h1 {
 }
 
 /* Clickable card links (Resources page) */
-.card-link {
+a.card-link {
   text-decoration: none;
   color: inherit;
   display: block;
+}
+
+/* Stop browser link styling bleeding into all child text */
+a.card-link,
+a.card-link:visited,
+a.card-link:hover,
+a.card-link:active {
+  color: inherit;
+  text-decoration: none;
+}
+
+a.card-link * {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Optional: make it feel more "clickable" without looking like a link */
+a.card-link:focus {
+  outline: 2px solid rgba(78, 161, 255, 0.35);
+  outline-offset: 4px;
+}
+
+:root[data-theme="light"] a.card-link:focus {
+  outline: 2px solid rgba(37, 99, 235, 0.25);
 }
 
 .card {
