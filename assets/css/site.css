@@ -122,6 +122,7 @@ body {
   align-items: center;
   padding: 14px 0;
   gap: 14px;
+  /* helps when wrapping */
   flex-wrap: wrap;
   /* key fix for mobile */
 }
@@ -133,6 +134,7 @@ body {
   color: var(--text);
   align-items: center;
   min-width: 220px;
+  /* avoids logo crushing */
 }
 
 .logo-img {
@@ -164,6 +166,7 @@ body {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  /* key fix */
   justify-content: flex-end;
   align-items: center;
 }
@@ -175,6 +178,7 @@ body {
   border-radius: 10px;
   transition: all .18s ease;
   white-space: nowrap;
+  /* keeps each link tidy */
 }
 
 .nav-link:hover {
@@ -183,6 +187,7 @@ body {
   transform: translateY(-1px);
 }
 
+/* Light theme needs a softer hover background */
 :root[data-theme="light"] .nav-link:hover {
   background: rgba(37, 99, 235, 0.08);
 }
@@ -196,7 +201,7 @@ body {
   background: rgba(37, 99, 235, 0.12);
 }
 
-/* Theme toggle button */
+/* Theme toggle button (we’ll add the HTML next step) */
 .theme-toggle {
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.04);
@@ -237,6 +242,7 @@ body {
   position: relative;
   padding: 60px 0 30px;
   isolation: isolate;
+  /* prevents blur/glow weirdness */
 }
 
 .hero-inner {
@@ -282,6 +288,7 @@ h1 {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  /* key fix */
 }
 
 /* =========================
@@ -366,17 +373,13 @@ h1 {
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin-top: 18px;
-
-  /* ensures equal row heights behave consistently */
-  align-items: stretch;
 }
 
 /* Clickable card links (Resources page) */
 a.card-link {
-  display: block;
-  height: 100%;
   text-decoration: none;
   color: inherit;
+  display: block;
 }
 
 /* Stop browser link styling bleeding into all child text */
@@ -393,7 +396,7 @@ a.card-link * {
   text-decoration: none;
 }
 
-/* Focus ring for keyboard navigation */
+/* Optional: make it feel more "clickable" without looking like a link */
 a.card-link:focus {
   outline: 2px solid rgba(78, 161, 255, 0.35);
   outline-offset: 4px;
@@ -403,7 +406,7 @@ a.card-link:focus {
   outline: 2px solid rgba(37, 99, 235, 0.25);
 }
 
-/* Card base */
+
 .card {
   background: var(--cardBg);
   border: 1px solid var(--line);
@@ -411,11 +414,6 @@ a.card-link:focus {
   padding: 16px;
   transition: all .18s ease;
   cursor: pointer;
-
-  /* equal-height cards + CTA pinned to bottom */
-  height: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
 .card:hover {
@@ -430,14 +428,6 @@ a.card-link:focus {
 
 .card p {
   color: var(--muted);
-}
-
-/* Resources card CTA text pinned to bottom */
-.card .card-cta {
-  margin-top: auto;
-  padding-top: 14px;
-  font-weight: 600;
-  color: var(--accent);
 }
 
 /* =========================
@@ -543,6 +533,7 @@ a.card-link:focus {
 
 .contact-form textarea {
   resize: vertical;
+  /* keeps width aligned */
   min-height: 160px;
 }
 
@@ -577,28 +568,4 @@ a.card-link:focus {
   transition: background-color 999999s ease-in-out 0s;
   box-shadow: 0 0 0px 1000px var(--cardBg) inset !important;
   border: 1px solid var(--line);
-}
-
-/* =========================
-   RESOURCES CARD SPACING FIX
-   ========================= */
-
-/* Fix odd "bubble/inset panel" look inside cards caused by default <p> margins */
-.card h3 {
-  margin: 0 0 10px;
-}
-
-.card p {
-  margin: 0 0 12px;
-}
-
-.card p:last-child {
-  margin-bottom: 0;
-}
-
-/* Keep CTA pinned neatly without extra paragraph margins */
-.card .card-cta {
-  margin-top: auto;
-  margin-bottom: 0;
-  padding-top: 14px;
 }
