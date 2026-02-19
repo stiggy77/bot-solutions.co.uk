@@ -399,6 +399,89 @@ h1 {
 }
 
 /* =========================
+   RESOURCES / GUIDE CARDS
+   (fixed bubble size + text clamp + remove underline)
+   ========================= */
+
+/* make the whole card clickable link behave like a block (Resources page) */
+a.card-link {
+  display: block;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+a.card-link:visited,
+a.card-link:hover,
+a.card-link:active {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* kill underline on any nested links/text inside the clickable card */
+a.card-link *,
+a.card-link *:visited,
+a.card-link *:hover,
+a.card-link *:active {
+  text-decoration: none !important;
+  color: inherit;
+}
+
+/* fixed "bubble" height and keep content contained */
+a.card-link .card,
+.grid .card {
+  min-height: 210px;
+  /* set bubble size */
+  display: flex;
+  /* allows CTA to sit at bottom */
+  flex-direction: column;
+  overflow: hidden;
+  /* prevents content poking out */
+}
+
+/* tidy margins inside cards so the height stays predictable */
+.card h3 {
+  margin: 0 0 10px;
+}
+
+.card p {
+  margin: 0 0 12px;
+}
+
+/* clamp title + body text so it never overflows the bubble */
+.card h3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  /* max 2 lines for title */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  /* max 4 lines for paragraph */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* CTA sits at the bottom and stays neat */
+.card .card-cta {
+  margin-top: auto;
+  color: var(--accent);
+  font-weight: 600;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  /* keep it one line */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =========================
    FOOTER
    ========================= */
 
@@ -431,6 +514,12 @@ h1 {
 
   .hero {
     padding: 44px 0 22px;
+  }
+
+  /* slightly taller cards on mobile so clamped text doesn’t feel cramped */
+  a.card-link .card,
+  .grid .card {
+    min-height: 220px;
   }
 }
 
