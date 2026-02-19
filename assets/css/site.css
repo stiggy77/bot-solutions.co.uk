@@ -453,6 +453,7 @@ a.card-link .card,
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   /* max 2 lines for title */
   overflow: hidden;
   text-overflow: ellipsis;
@@ -462,6 +463,7 @@ a.card-link .card,
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
+  line-clamp: 4;
   /* max 4 lines for paragraph */
   overflow: hidden;
   text-overflow: ellipsis;
@@ -476,6 +478,7 @@ a.card-link .card,
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
   /* keep it one line */
   overflow: hidden;
   text-overflow: ellipsis;
