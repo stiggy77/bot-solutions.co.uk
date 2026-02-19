@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
 
     <title>Technical Resources | BOT-Solutions</title>
+    <link rel="icon" type="image/png" href="favicon.png">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -32,10 +33,14 @@
             <nav class="nav">
                 <a class="nav-link" href="index.html">Home</a>
                 <a class="nav-link" href="services.html">Services</a>
-                <a class="nav-link" href="pricing.html">Pricing</a>
                 <a class="nav-link is-active" href="resources.html">Resources</a>
+                <a class="nav-link" href="pricing.html">Pricing</a>
                 <a class="nav-link" href="contact.html">Contact</a>
             </nav>
+
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">
+                🌙 Dark
+            </button>
 
         </div>
     </header>
@@ -46,18 +51,17 @@
             <div class="container hero-inner">
 
                 <div>
-                    <div class="eyebrow">Technical Guides & Case Studies</div>
+                    <div class="eyebrow">Technical Guides &amp; Case Studies</div>
 
                     <h1>Practical automation and reporting patterns for application support teams.</h1>
 
                     <p class="lede">
-                        A growing collection of technical walkthroughs and implementation patterns
-                        covering PowerShell automation, operational reporting, monitoring structure,
-                        alert integration, and support optimisation.
+                        A growing collection of implementation patterns covering PowerShell automation,
+                        operational reporting, monitoring structure, alert integration, and support optimisation.
                     </p>
 
                     <ul class="panel-list">
-                        <li>Real-world implementation approaches</li>
+                        <li>Real-world approaches (not theory)</li>
                         <li>Maintainability-focused design</li>
                         <li>Operational stability over novelty</li>
                     </ul>
@@ -85,37 +89,33 @@
 
                 <div class="grid">
 
-                    <div class="card">
+                    <!-- Clickable card -->
+                    <a class="card card-link" href="powershell-reporting-framework.html"
+                        aria-label="Read: PowerShell Reporting Framework">
                         <h3>PowerShell Reporting Framework</h3>
                         <p>
-                            A maintainable framework pattern for scheduled reporting jobs,
-                            structured logging, MySQL querying, and optional Slack notifications.
+                            A maintainable framework pattern for scheduled reporting jobs, structured logging,
+                            MySQL querying, and optional Slack notifications.
                         </p>
-                        <p>
-                            <a href="powershell-reporting-framework.html">Read guide →</a>
-                        </p>
-                    </div>
+                        <p class="lede" style="margin-top:14px;"><strong>Click to read more →</strong></p>
+                    </a>
 
                     <div class="card">
                         <h3>SLA Monitoring Structure</h3>
                         <p>
-                            Designing structured monitoring for operational jobs, including
-                            failure detection, logging standards, and alert routing.
+                            Designing structured monitoring for operational jobs, including failure detection,
+                            logging standards, and alert routing.
                         </p>
-                        <p>
-                            <em>Coming soon</em>
-                        </p>
+                        <p class="lede" style="margin-top:14px;"><em>Coming soon</em></p>
                     </div>
 
                     <div class="card">
-                        <h3>Slack & Alert Integration Patterns</h3>
+                        <h3>Slack &amp; Alert Integration Patterns</h3>
                         <p>
-                            Clean approaches for integrating Slack and email notifications
-                            into automation workflows without creating alert noise.
+                            Clean approaches for integrating Slack and email notifications into automation
+                            workflows without creating alert noise.
                         </p>
-                        <p>
-                            <em>Coming soon</em>
-                        </p>
+                        <p class="lede" style="margin-top:14px;"><em>Coming soon</em></p>
                     </div>
 
                     <div class="card">
@@ -124,9 +124,7 @@
                             Practical considerations for cost control, environment structure,
                             and workload stability in small to mid-sized environments.
                         </p>
-                        <p>
-                            <em>Coming soon</em>
-                        </p>
+                        <p class="lede" style="margin-top:14px;"><em>Coming soon</em></p>
                     </div>
 
                     <div class="card">
@@ -135,9 +133,7 @@
                             Patterns for validating scheduled imports, detecting anomalies,
                             and reducing manual review workload.
                         </p>
-                        <p>
-                            <em>Coming soon</em>
-                        </p>
+                        <p class="lede" style="margin-top:14px;"><em>Coming soon</em></p>
                     </div>
 
                 </div>
@@ -154,6 +150,49 @@
         </div>
     </footer>
 
+    <!-- Theme Toggle Script (same as index) -->
+    <script>
+        (function () {
+            const root = document.documentElement;
+            const toggle = document.getElementById("themeToggle");
+
+            if (!toggle) return;
+
+            const savedTheme = localStorage.getItem("theme");
+
+            if (savedTheme) {
+                if (savedTheme === "light") root.setAttribute("data-theme", "light");
+                else root.removeAttribute("data-theme");
+            } else {
+                const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+                if (!prefersDark) root.setAttribute("data-theme", "light");
+            }
+
+            function updateButton() {
+                const current = root.getAttribute("data-theme");
+                toggle.textContent = current === "light" ? "🌞 Light" : "🌙 Dark";
+            }
+
+            updateButton();
+
+            toggle.addEventListener("click", function () {
+                const current = root.getAttribute("data-theme");
+                const newTheme = current === "light" ? "dark" : "light";
+
+                if (newTheme === "light") {
+                    root.setAttribute("data-theme", "light");
+                    localStorage.setItem("theme", "light");
+                } else {
+                    root.removeAttribute("data-theme");
+                    localStorage.setItem("theme", "dark");
+                }
+
+                updateButton();
+            });
+        })();
+    </script>
+
+    <!-- Chatbase Widget -->
     <script>
         (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "ALpjA7Pu9YfymHwmVUs6-"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
     </script>
