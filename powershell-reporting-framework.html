@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
 
     <title>PowerShell Reporting Framework for Application Support Teams | BOT-Solutions</title>
+    <link rel="icon" type="image/png" href="favicon.png">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -32,9 +33,14 @@
             <nav class="nav">
                 <a class="nav-link" href="index.html">Home</a>
                 <a class="nav-link" href="services.html">Services</a>
+                <a class="nav-link is-active" href="resources.html">Resources</a>
                 <a class="nav-link" href="pricing.html">Pricing</a>
                 <a class="nav-link" href="contact.html">Contact</a>
             </nav>
+
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">
+                🌙 Dark
+            </button>
 
         </div>
     </header>
@@ -90,8 +96,8 @@
                 <h2>1) Folder structure</h2>
                 <p class="lede">
                     Keep a consistent layout so every automation looks the same. This makes support, handover, and
-                    scaling much easier.
-                    Below is a simple structure that works well for scheduled jobs.
+                    scaling much
+                    easier. Below is a simple structure that works well for scheduled jobs.
                 </p>
 
                 <div class="card">
@@ -131,8 +137,9 @@ C:\OpsAutomation\
                 <h2>2) Configuration (no hardcoding)</h2>
                 <p class="lede">
                     Store environment settings in JSON. Do not hardcode secrets inside scripts. In production, prefer a
-                    secrets store
-                    (Windows Credential Manager, Key Vault, 1Password CLI, etc.), but JSON is fine for non-sensitive
+                    secrets
+                    store (Windows Credential Manager, Key Vault, 1Password CLI, etc.), but JSON is fine for
+                    non-sensitive
                     configuration.
                 </p>
 
@@ -160,8 +167,8 @@ C:\OpsAutomation\
 
                 <p class="lede">
                     For credentials, use a separate method. A common pattern is to read a stored credential and build
-                    the connection string
-                    at runtime.
+                    the
+                    connection string at runtime.
                 </p>
 
             </div>
@@ -210,7 +217,8 @@ function Write-Log {
 
                 <p class="lede">
                     This format makes it easy to search across logs and route alerts (for example, “ERROR” lines in the
-                    last hour).
+                    last
+                    hour).
                 </p>
 
             </div>
@@ -221,8 +229,9 @@ function Write-Log {
 
                 <h2>4) Job wrapper pattern (one way in, one way out)</h2>
                 <p class="lede">
-                    A wrapper standardises how jobs run: load config, init logging, catch exceptions, write outputs,
-                    and optionally notify Slack. Every job then follows the same shape.
+                    A wrapper standardises how jobs run: load config, init logging, catch exceptions, write outputs, and
+                    optionally
+                    notify Slack. Every job then follows the same shape.
                 </p>
 
                 <div class="card">
@@ -288,8 +297,9 @@ catch {
                 </div>
 
                 <p class="lede">
-                    Note the important bits: one config source, one log context, a predictable report location,
-                    and a single exception handler that controls exit codes (critical for scheduled tasks).
+                    Note the important bits: one config source, one log context, a predictable report location, and a
+                    single
+                    exception handler that controls exit codes (critical for scheduled tasks).
                 </p>
 
             </div>
@@ -329,7 +339,8 @@ function Invoke-MySqlQuery {
 
                 <p class="lede">
                     Keep the calling code the same regardless of driver. Swapping a connector later should not require
-                    rewriting jobs.
+                    rewriting
+                    jobs.
                 </p>
 
             </div>
@@ -341,8 +352,8 @@ function Invoke-MySqlQuery {
                 <h2>6) Report output (HTML + optional CSV)</h2>
                 <p class="lede">
                     HTML is useful for quick viewing and email sharing. CSV is useful for downstream tools. Generate
-                    both if needed,
-                    but keep output paths consistent.
+                    both if
+                    needed, but keep output paths consistent.
                 </p>
 
                 <div class="card">
@@ -375,8 +386,9 @@ function Export-HtmlReport {
 
                 <h2>7) Scheduled Task execution</h2>
                 <p class="lede">
-                    Use a dedicated service account, run with least privilege, and capture exit codes.
-                    Keep the scheduled task action predictable and avoid running interactive profiles.
+                    Use a dedicated service account, run with least privilege, and capture exit codes. Keep the
+                    scheduled task
+                    action predictable and avoid running interactive profiles.
                 </p>
 
                 <div class="card">
@@ -433,8 +445,8 @@ Start in:
                 <h2>Want this implemented in your environment?</h2>
                 <p class="lede">
                     If you’re running application support alongside day-to-day admin work, a consistent automation
-                    framework reduces
-                    manual effort and improves operational visibility without adding complexity.
+                    framework
+                    reduces manual effort and improves operational visibility without adding complexity.
                 </p>
 
                 <div style="margin-top:25px;">
@@ -453,6 +465,49 @@ Start in:
         </div>
     </footer>
 
+    <!-- Theme Toggle Script (same as index) -->
+    <script>
+        (function () {
+            const root = document.documentElement;
+            const toggle = document.getElementById("themeToggle");
+
+            if (!toggle) return;
+
+            const savedTheme = localStorage.getItem("theme");
+
+            if (savedTheme) {
+                if (savedTheme === "light") root.setAttribute("data-theme", "light");
+                else root.removeAttribute("data-theme");
+            } else {
+                const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+                if (!prefersDark) root.setAttribute("data-theme", "light");
+            }
+
+            function updateButton() {
+                const current = root.getAttribute("data-theme");
+                toggle.textContent = current === "light" ? "🌞 Light" : "🌙 Dark";
+            }
+
+            updateButton();
+
+            toggle.addEventListener("click", function () {
+                const current = root.getAttribute("data-theme");
+                const newTheme = current === "light" ? "dark" : "light";
+
+                if (newTheme === "light") {
+                    root.setAttribute("data-theme", "light");
+                    localStorage.setItem("theme", "light");
+                } else {
+                    root.removeAttribute("data-theme");
+                    localStorage.setItem("theme", "dark");
+                }
+
+                updateButton();
+            });
+        })();
+    </script>
+
+    <!-- Chatbase Widget -->
     <script>
         (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "ALpjA7Pu9YfymHwmVUs6-"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
     </script>
