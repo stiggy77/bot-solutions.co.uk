@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Job Import Validation Framework | BOT-Solutions</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+        content="Patterns for validating scheduled imports, detecting anomalies, and reducing manual review workload through structured validation, thresholds, and alert logic.">
+
+    <link rel="canonical" href="https://bot-solutions.co.uk/job-import-validation-framework.html">
+
+    <link rel="stylesheet" href="assets/css/site.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container header-bar">
+
+            <a class="brand" href="index.html">
+                <img src="images/logo.png" alt="BOT-Solutions logo" class="logo-img">
+                <div>
+                    <div class="brand-name">BOT-Solutions</div>
+                    <div class="brand-tag">Business Operations, Technology &amp; Solutions</div>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="services.html">Services</a>
+                <a class="nav-link is-active" href="resources.html">Resources</a>
+                <a class="nav-link" href="pricing.html">Pricing</a>
+                <a class="nav-link" href="contact.html">Contact</a>
+            </nav>
+
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">
+                🌙 Dark
+            </button>
+
+        </div>
+    </header>
+
+    <main>
+
+        <section class="hero">
+            <div class="container hero-inner">
+
+                <div>
+                    <div class="eyebrow">Guide • Imports • Validation • Automation</div>
+
+                    <h1>Job import validation that prevents silent failures.</h1>
+
+                    <p class="lede">
+                        Scheduled imports often “succeed” while quietly failing business expectations.
+                        This framework focuses on structured validation, anomaly detection,
+                        and intelligent alerting to reduce manual review and prevent surprises.
+                    </p>
+
+                    <div class="cta-row">
+                        <a class="btn btn-primary" href="contact.html">Discuss validation patterns →</a>
+                        <a class="btn btn-ghost" href="services.html">View services</a>
+                    </div>
+
+                    <ul class="panel-list">
+                        <li>Detect anomalies before users do</li>
+                        <li>Reduce repetitive manual checks</li>
+                        <li>Build validation into automation pipelines</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="panel-title">What you’ll leave with</div>
+                    <ul class="panel-list">
+                        <li>Validation layer structure</li>
+                        <li>Threshold & trend logic</li>
+                        <li>Noise-controlled alert design</li>
+                        <li>Review & reporting patterns</li>
+                    </ul>
+                    <p class="lede">Imports that are trusted — not assumed.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>1) Validate outcomes, not just execution</h2>
+                <p class="lede">
+                    A job returning “Success” doesn’t mean the business result is correct.
+                    Validation should confirm expected volume, structure, and integrity.
+                </p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Volume checks</h3>
+                        <p>Compare record counts against historical averages and expected thresholds.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Schema validation</h3>
+                        <p>Ensure required fields exist, formats are valid, and critical data isn’t blank.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Business rules</h3>
+                        <p>Validate domain logic (e.g. dates in range, status combinations, required relationships).</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>2) Use dynamic thresholds, not hard-coded numbers</h2>
+                <p class="lede">
+                    Static thresholds cause false positives. Trend-based validation
+                    adapts to seasonality and workload variation.
+                </p>
+
+                <div class="card">
+                    <pre style="white-space:pre-wrap; margin:0;">
+Example rule:
+If today's import count deviates > 30% from 14-day rolling average
+AND total count > minimum operational threshold
+THEN raise P2 alert.
+
+If deviation > 60% OR count = 0
+THEN escalate to P1.
+</pre>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>3) Detect anomaly patterns</h2>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Repeated minor failures</h3>
+                        <p>Small recurring errors often indicate upstream drift.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Latency growth</h3>
+                        <p>Gradual increase in run time may indicate database or queue pressure.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Backlog trends</h3>
+                        <p>Growing queues signal capacity imbalance or stuck processing.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>4) Structured validation workflow</h2>
+
+                <div class="card">
+                    <pre style="white-space:pre-wrap; margin:0;">
+Step 1 – Execute import
+Step 2 – Capture metrics (count, duration, error rate)
+Step 3 – Run validation rules
+Step 4 – Determine severity (P1 / P2 / P3)
+Step 5 – Route alert or append to digest
+Step 6 – Store metrics for trend analysis
+</pre>
+                </div>
+
+                <p class="lede">
+                    This keeps validation logic separate from import logic,
+                    improving maintainability and testability.
+                </p>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>5) Reduce manual review workload</h2>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Daily summaries</h3>
+                        <p>Group low-severity signals into structured digests.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Clear pass/fail indicators</h3>
+                        <p>Dashboards should show green, amber, red — not paragraphs.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Automatic ticket creation</h3>
+                        <p>When thresholds breach repeatedly, create structured work items.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>Want help building structured validation into your imports?</h2>
+                <p class="lede">
+                    We help application support teams move from reactive checks
+                    to automated validation frameworks that scale.
+                </p>
+
+                <div style="margin-top:25px;">
+                    <a class="btn btn-primary" href="contact.html">Contact BOT-Solutions →</a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>© 2026 BOT-Solutions</div>
+            <div>Automation and reporting that works.</div>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            const root = document.documentElement;
+            const toggle = document.getElementById("themeToggle");
+            if (!toggle) return;
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme) {
+                if (savedTheme === "light") root.setAttribute("data-theme", "light");
+                else root.removeAttribute("data-theme");
+            } else {
+                const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+                if (!prefersDark) root.setAttribute("data-theme", "light");
+            }
+            function updateButton() {
+                const current = root.getAttribute("data-theme");
+                toggle.textContent = current === "light" ? "🌞 Light" : "🌙 Dark";
+            }
+            updateButton();
+            toggle.addEventListener("click", function () {
+                const current = root.getAttribute("data-theme");
+                const newTheme = current === "light" ? "dark" : "light";
+                if (newTheme === "light") {
+                    root.setAttribute("data-theme", "light");
+                    localStorage.setItem("theme", "light");
+                } else {
+                    root.removeAttribute("data-theme");
+                    localStorage.setItem("theme", "dark");
+                }
+                updateButton();
+            });
+        })();
+    </script>
+
+    <script>
+        (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "ALpjA7Pu9YfymHwmVUs6-"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
+    </script>
+
+</body>
+
+</html>
