@@ -1,3 +1,4 @@
+```css
 /* =========================
    THEME TOKENS
    ========================= */
@@ -578,3 +579,29 @@ a.card-link:focus {
   box-shadow: 0 0 0px 1000px var(--cardBg) inset !important;
   border: 1px solid var(--line);
 }
+
+/* =========================
+   RESOURCES CARD SPACING FIX
+   ========================= */
+
+/* Fix odd "bubble/inset panel" look inside cards caused by default <p> margins */
+.card h3 {
+  margin: 0 0 10px;
+}
+
+.card p {
+  margin: 0 0 12px;
+}
+
+.card p:last-child {
+  margin-bottom: 0;
+}
+
+/* Keep CTA pinned neatly without extra paragraph margins */
+.card .card-cta {
+  margin-top: auto;
+  margin-bottom: 0;
+  padding-top: 14px;
+}
+
+```
