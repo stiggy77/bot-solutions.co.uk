@@ -375,6 +375,13 @@ h1 {
   margin-top: 18px;
 }
 
+/* Clickable card links (Resources page) */
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
 .card {
   background: var(--cardBg);
   border: 1px solid var(--line);
