@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Azure Operational Optimisation | BOT-Solutions</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+        content="Practical Azure operational optimisation guidance covering cost control, environment structure, workload stability, monitoring, and governance for small to mid-sized environments.">
+
+    <link rel="canonical" href="https://bot-solutions.co.uk/azure-operational-optimisation.html">
+
+    <link rel="stylesheet" href="assets/css/site.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container header-bar">
+
+            <a class="brand" href="index.html">
+                <img src="images/logo.png" alt="BOT-Solutions logo" class="logo-img">
+                <div>
+                    <div class="brand-name">BOT-Solutions</div>
+                    <div class="brand-tag">Business Operations, Technology &amp; Solutions</div>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="services.html">Services</a>
+                <a class="nav-link is-active" href="resources.html">Resources</a>
+                <a class="nav-link" href="pricing.html">Pricing</a>
+                <a class="nav-link" href="contact.html">Contact</a>
+            </nav>
+
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">
+                🌙 Dark
+            </button>
+
+        </div>
+    </header>
+
+    <main>
+
+        <section class="hero">
+            <div class="container hero-inner">
+
+                <div>
+                    <div class="eyebrow">Guide • Azure • Optimisation • Governance</div>
+
+                    <h1>Azure operational optimisation without over-engineering.</h1>
+
+                    <p class="lede">
+                        Cloud cost overruns and unstable workloads rarely come from lack of features.
+                        They come from unclear structure, weak guardrails, and reactive scaling.
+                        This guide focuses on practical optimisation for small to mid-sized Azure environments.
+                    </p>
+
+                    <div class="cta-row">
+                        <a class="btn btn-primary" href="contact.html">Discuss Azure optimisation →</a>
+                        <a class="btn btn-ghost" href="services.html">View services</a>
+                    </div>
+
+                    <ul class="panel-list">
+                        <li>Cost control without constant firefighting</li>
+                        <li>Environment structure that scales sensibly</li>
+                        <li>Stable workloads with predictable performance</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="panel-title">What you’ll leave with</div>
+                    <ul class="panel-list">
+                        <li>Resource group structure patterns</li>
+                        <li>Tagging & cost visibility standards</li>
+                        <li>Right-sizing & scaling strategy</li>
+                        <li>Monitoring & guardrail defaults</li>
+                    </ul>
+                    <p class="lede">Less drift. Fewer surprises. Smaller invoices.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>1) Structure before scale</h2>
+                <p class="lede">
+                    Optimisation starts with clarity. Resource sprawl makes cost and troubleshooting harder.
+                    Structure environments intentionally from day one.
+                </p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Separate environments</h3>
+                        <p>Prod, Test, Dev — separate resource groups at minimum. Ideally separate subscriptions.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Group by workload</h3>
+                        <p>Keep related services (app, DB, storage, monitoring) in logical workload groups.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Clear naming standards</h3>
+                        <p>Consistent naming improves cost tracking, automation, and incident response.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>2) Cost visibility is non-negotiable</h2>
+                <p class="lede">
+                    If you can’t explain your Azure bill in 5 minutes, you don’t have visibility.
+                    Tagging and budget alerts are simple but powerful controls.
+                </p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Mandatory tags</h3>
+                        <p>Environment, Owner, System, CostCentre. Enforce via policy where possible.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Budgets & alerts</h3>
+                        <p>Set subscription and workload-level budgets with early warning thresholds.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Monthly review rhythm</h3>
+                        <p>Review cost trends alongside performance and incident metrics.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>3) Right-size before you autoscale</h2>
+                <p class="lede">
+                    Many environments are simply over-provisioned. Optimisation is often about
+                    resizing, not redesigning.
+                </p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Measure real utilisation</h3>
+                        <p>CPU, memory, IOPS, DTU/vCore usage — over at least 30 days.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Resize safely</h3>
+                        <p>Reduce one tier at a time. Monitor impact before continuing.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Use reserved capacity wisely</h3>
+                        <p>Commit only when usage patterns are stable and predictable.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>4) Guardrails prevent chaos</h2>
+                <p class="lede">
+                    Optimisation isn’t a one-time task. Governance prevents regression.
+                </p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Azure Policies</h3>
+                        <p>Restrict regions, enforce tags, limit SKU sprawl, and block risky configurations.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Role clarity</h3>
+                        <p>Limit Contributor rights. Separate deployment from governance controls.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Change visibility</h3>
+                        <p>Track deployments and configuration drift to reduce “mystery outages”.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>5) Stability over novelty</h2>
+                <p class="lede">
+                    The newest service isn’t always the best choice. Stable, well-understood
+                    architectures reduce operational overhead.
+                </p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Prefer managed services</h3>
+                        <p>Where operational burden is reduced without losing required control.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Standardise patterns</h3>
+                        <p>Fewer architectural variants = fewer support scenarios.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Document decisions</h3>
+                        <p>Clarity today prevents confusion six months from now.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>Need help optimising your Azure estate?</h2>
+                <p class="lede">
+                    We work with small to mid-sized environments that need structure,
+                    clarity, and cost control — without enterprise complexity.
+                </p>
+
+                <div style="margin-top:25px;">
+                    <a class="btn btn-primary" href="contact.html">Contact BOT-Solutions →</a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>© 2026 BOT-Solutions</div>
+            <div>Automation and reporting that works.</div>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            const root = document.documentElement;
+            const toggle = document.getElementById("themeToggle");
+            if (!toggle) return;
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme) {
+                if (savedTheme === "light") root.setAttribute("data-theme", "light");
+                else root.removeAttribute("data-theme");
+            } else {
+                const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+                if (!prefersDark) root.setAttribute("data-theme", "light");
+            }
+            function updateButton() {
+                const current = root.getAttribute("data-theme");
+                toggle.textContent = current === "light" ? "🌞 Light" : "🌙 Dark";
+            }
+            updateButton();
+            toggle.addEventListener("click", function () {
+                const current = root.getAttribute("data-theme");
+                const newTheme = current === "light" ? "dark" : "light";
+                if (newTheme === "light") {
+                    root.setAttribute("data-theme", "light");
+                    localStorage.setItem("theme", "light");
+                } else {
+                    root.removeAttribute("data-theme");
+                    localStorage.setItem("theme", "dark");
+                }
+                updateButton();
+            });
+        })();
+    </script>
+
+    <script>
+        (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "ALpjA7Pu9YfymHwmVUs6-"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
+    </script>
+
+</body>
+
+</html>
