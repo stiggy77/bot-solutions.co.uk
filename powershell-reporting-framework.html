@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>PowerShell Reporting Framework for Application Support Teams | BOT-Solutions</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+        content="A practical tutorial on building a maintainable PowerShell reporting framework for application support teams: structure, logging, config, MySQL queries, and Slack alerts.">
+
+    <link rel="canonical" href="https://bot-solutions.co.uk/powershell-reporting-framework.html">
+
+    <link rel="stylesheet" href="assets/css/site.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container header-bar">
+
+            <a class="brand" href="index.html">
+                <img src="images/logo.png" alt="BOT-Solutions logo" class="logo-img">
+                <div>
+                    <div class="brand-name">BOT-Solutions</div>
+                    <div class="brand-tag">Business Operations, Technology &amp; Solutions</div>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="services.html">Services</a>
+                <a class="nav-link" href="pricing.html">Pricing</a>
+                <a class="nav-link" href="contact.html">Contact</a>
+            </nav>
+
+        </div>
+    </header>
+
+    <main>
+
+        <section class="hero">
+            <div class="container hero-inner">
+
+                <div>
+                    <div class="eyebrow">Tutorial • PowerShell • Reporting</div>
+
+                    <h1>Building a maintainable PowerShell reporting framework for application support teams</h1>
+
+                    <p class="lede">
+                        This is a practical, repeatable pattern for producing operational reports from scripts
+                        (scheduled tasks),
+                        with consistent logging, error handling, and optional Slack alerting. The goal is boring
+                        reliability:
+                        a framework you can reuse across many jobs without creating “hero scripts”.
+                    </p>
+
+                    <div class="cta-row">
+                        <a class="btn btn-primary" href="contact.html">Discuss a similar build →</a>
+                        <a class="btn btn-ghost" href="services.html">View services</a>
+                    </div>
+
+                    <ul class="panel-list">
+                        <li>Script structure that scales across multiple jobs</li>
+                        <li>Config-driven execution (no hardcoded secrets)</li>
+                        <li>Logging you can grep and alert on</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="panel-title">What you’ll build</div>
+                    <ul class="panel-list">
+                        <li>A standard folder layout</li>
+                        <li>A simple logging module</li>
+                        <li>A job wrapper pattern</li>
+                        <li>Report output (HTML/CSV)</li>
+                        <li>Slack notifications (optional)</li>
+                    </ul>
+                    <p class="lede">Designed for admins, not for show.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>1) Folder structure</h2>
+                <p class="lede">
+                    Keep a consistent layout so every automation looks the same. This makes support, handover, and
+                    scaling much easier.
+                    Below is a simple structure that works well for scheduled jobs.
+                </p>
+
+                <div class="card">
+                    <pre style="white-space:pre-wrap; margin:0;">
+C:\OpsAutomation\
+  config\
+    environment.json
+  modules\
+    Logging.psm1
+    Slack.psm1
+    MySql.psm1
+    HtmlReport.psm1
+  jobs\
+    WeeklyReferenceSummary.ps1
+    ImportHealthCheck.ps1
+  output\
+    reports\
+    exports\
+  logs\
+    jobs\
+    framework\
+</pre>
+                </div>
+
+                <p class="lede">
+                    On GitHub Pages you’re documenting the approach; in a real environment you’d keep this under
+                    something like
+                    <code>C:\OpsAutomation</code> (or your existing ops path) with permissions restricted appropriately.
+                </p>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>2) Configuration (no hardcoding)</h2>
+                <p class="lede">
+                    Store environment settings in JSON. Do not hardcode secrets inside scripts. In production, prefer a
+                    secrets store
+                    (Windows Credential Manager, Key Vault, 1Password CLI, etc.), but JSON is fine for non-sensitive
+                    configuration.
+                </p>
+
+                <div class="card">
+                    <h3>config\environment.json (example)</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+{
+  "Environment": "Production",
+  "OutputRoot": "C:\\OpsAutomation\\output",
+  "LogRoot": "C:\\OpsAutomation\\logs",
+  "Slack": {
+    "Enabled": true,
+    "WebhookUrl": "https://hooks.slack.com/services/REDACTED/REDACTED/REDACTED",
+    "Channel": "#ops-alerts"
+  },
+  "MySql": {
+    "Server": "mysql.example.internal",
+    "Port": 3306,
+    "Database": "operations",
+    "User": "report_reader"
+  }
+}
+</pre>
+                </div>
+
+                <p class="lede">
+                    For credentials, use a separate method. A common pattern is to read a stored credential and build
+                    the connection string
+                    at runtime.
+                </p>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>3) Logging module (consistent and grep-friendly)</h2>
+                <p class="lede">
+                    Logs are the difference between a script that “ran” and a script you can support. Keep it
+                    consistent:
+                    timestamp, level, job name, message, and optionally a correlation id.
+                </p>
+
+                <div class="card">
+                    <h3>modules\Logging.psm1 (snippet)</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+function New-LogContext {
+  param(
+    [Parameter(Mandatory)] [string] $JobName,
+    [Parameter(Mandatory)] [string] $LogRoot
+  )
+  $date = (Get-Date).ToString("yyyy-MM-dd")
+  $path = Join-Path $LogRoot ("jobs\\{0}\\{1}.log" -f $JobName, $date)
+  New-Item -ItemType Directory -Path (Split-Path $path) -Force | Out-Null
+  return [pscustomobject]@{
+    JobName = $JobName
+    LogPath = $path
+    CorrelationId = [guid]::NewGuid().ToString()
+  }
+}
+
+function Write-Log {
+  param(
+    [Parameter(Mandatory)] $Context,
+    [Parameter(Mandatory)] [ValidateSet("INFO","WARN","ERROR")] [string] $Level,
+    [Parameter(Mandatory)] [string] $Message
+  )
+  $ts = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+  $line = "{0} [{1}] [{2}] [{3}] {4}" -f $ts, $Level, $Context.JobName, $Context.CorrelationId, $Message
+  Add-Content -Path $Context.LogPath -Value $line -Encoding UTF8
+}
+</pre>
+                </div>
+
+                <p class="lede">
+                    This format makes it easy to search across logs and route alerts (for example, “ERROR” lines in the
+                    last hour).
+                </p>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>4) Job wrapper pattern (one way in, one way out)</h2>
+                <p class="lede">
+                    A wrapper standardises how jobs run: load config, init logging, catch exceptions, write outputs,
+                    and optionally notify Slack. Every job then follows the same shape.
+                </p>
+
+                <div class="card">
+                    <h3>jobs\WeeklyReferenceSummary.ps1 (structure)</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+param(
+  [string] $ConfigPath = "C:\\OpsAutomation\\config\\environment.json"
+)
+
+Import-Module "C:\\OpsAutomation\\modules\\Logging.psm1" -Force
+Import-Module "C:\\OpsAutomation\\modules\\Slack.psm1" -Force
+Import-Module "C:\\OpsAutomation\\modules\\MySql.psm1" -Force
+Import-Module "C:\\OpsAutomation\\modules\\HtmlReport.psm1" -Force
+
+$config = Get-Content $ConfigPath -Raw | ConvertFrom-Json
+
+$jobName = "WeeklyReferenceSummary"
+$ctx = New-LogContext -JobName $jobName -LogRoot $config.LogRoot
+
+try {
+  Write-Log -Context $ctx -Level INFO -Message "Job start"
+
+  # 1) Query data
+  $rows = Invoke-MySqlQuery -Config $config -Query @"
+SELECT
+  DATE(created_at) as day,
+  COUNT(*) as failures
+FROM reporting.failures
+WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+GROUP BY DATE(created_at)
+ORDER BY day;
+"@
+
+  Write-Log -Context $ctx -Level INFO -Message ("Rows returned: {0}" -f ($rows.Count))
+
+  # 2) Build report
+  $outDir = Join-Path $config.OutputRoot "reports"
+  New-Item -ItemType Directory -Path $outDir -Force | Out-Null
+
+  $reportPath = Join-Path $outDir ("{0}-{1}.html" -f $jobName, (Get-Date).ToString("yyyyMMdd-HHmmss"))
+  Export-HtmlReport -Title "Weekly Reference Failures" -Rows $rows -OutPath $reportPath
+
+  Write-Log -Context $ctx -Level INFO -Message ("Report written: {0}" -f $reportPath)
+
+  # 3) Notify (optional)
+  if($config.Slack.Enabled -eq $true){
+    Send-SlackMessage -WebhookUrl $config.Slack.WebhookUrl -Text ("{0}: report generated: {1}" -f $jobName, $reportPath)
+  }
+
+  Write-Log -Context $ctx -Level INFO -Message "Job complete"
+  exit 0
+}
+catch {
+  Write-Log -Context $ctx -Level ERROR -Message ("Unhandled error: {0}" -f $_.Exception.Message)
+
+  if($config.Slack.Enabled -eq $true){
+    Send-SlackMessage -WebhookUrl $config.Slack.WebhookUrl -Text ("{0}: FAILED - {1}" -f $jobName, $_.Exception.Message)
+  }
+
+  exit 1
+}
+</pre>
+                </div>
+
+                <p class="lede">
+                    Note the important bits: one config source, one log context, a predictable report location,
+                    and a single exception handler that controls exit codes (critical for scheduled tasks).
+                </p>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>5) MySQL query execution (pattern, not a dependency list)</h2>
+                <p class="lede">
+                    The exact driver choice varies (ODBC, .NET connector, vendor tooling). The key is that your job
+                    calls a single
+                    function and receives rows back consistently.
+                </p>
+
+                <div class="card">
+                    <h3>modules\MySql.psm1 (pseudo-implementation)</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+function Invoke-MySqlQuery {
+  param(
+    [Parameter(Mandatory)] $Config,
+    [Parameter(Mandatory)] [string] $Query
+  )
+
+  # In production:
+  # - load credential from a secure store
+  # - build connection string
+  # - open connection
+  # - execute query
+  # - return rows as objects
+
+  # Return example object array for demonstration:
+  return @()
+}
+</pre>
+                </div>
+
+                <p class="lede">
+                    Keep the calling code the same regardless of driver. Swapping a connector later should not require
+                    rewriting jobs.
+                </p>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>6) Report output (HTML + optional CSV)</h2>
+                <p class="lede">
+                    HTML is useful for quick viewing and email sharing. CSV is useful for downstream tools. Generate
+                    both if needed,
+                    but keep output paths consistent.
+                </p>
+
+                <div class="card">
+                    <h3>modules\HtmlReport.psm1 (snippet)</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+function Export-HtmlReport {
+  param(
+    [Parameter(Mandatory)] [string] $Title,
+    [Parameter(Mandatory)] $Rows,
+    [Parameter(Mandatory)] [string] $OutPath
+  )
+
+  $html = @()
+  $html += "&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset='utf-8'&gt;"
+  $html += "&lt;title&gt;$Title&lt;/title&gt;&lt;/head&gt;&lt;body&gt;"
+  $html += "&lt;h1&gt;$Title&lt;/h1&gt;"
+  $html += ($Rows | ConvertTo-Html -Fragment)
+  $html += "&lt;/body&gt;&lt;/html&gt;"
+
+  $html -join "`n" | Set-Content -Path $OutPath -Encoding UTF8
+}
+</pre>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>7) Scheduled Task execution</h2>
+                <p class="lede">
+                    Use a dedicated service account, run with least privilege, and capture exit codes.
+                    Keep the scheduled task action predictable and avoid running interactive profiles.
+                </p>
+
+                <div class="card">
+                    <h3>Example task action</h3>
+                    <pre style="white-space:pre-wrap; margin:0;">
+Program/script:
+  powershell.exe
+
+Arguments:
+  -NoProfile -ExecutionPolicy Bypass -File "C:\OpsAutomation\jobs\WeeklyReferenceSummary.ps1"
+
+Start in:
+  C:\OpsAutomation
+</pre>
+                </div>
+
+                <p class="lede">
+                    The wrapper pattern above ensures success/failure is meaningful and easy to alert on.
+                </p>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>Common mistakes to avoid</h2>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Hardcoding environment details</h3>
+                        <p>Use config. Keep secrets out of source. Your future self will thank you.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Unstructured “one-off” scripts</h3>
+                        <p>Start with the wrapper and modules. Copy/paste structure is fine; copy/paste logic is not.
+                        </p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Logs that don’t help</h3>
+                        <p>Log job start/end, counts, paths written, and error messages. Make it easy to diagnose
+                            quickly.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>Want this implemented in your environment?</h2>
+                <p class="lede">
+                    If you’re running application support alongside day-to-day admin work, a consistent automation
+                    framework reduces
+                    manual effort and improves operational visibility without adding complexity.
+                </p>
+
+                <div style="margin-top:25px;">
+                    <a class="btn btn-primary" href="contact.html">Contact BOT-Solutions →</a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>© 2026 BOT-Solutions</div>
+            <div>Automation and reporting that works.</div>
+        </div>
+    </footer>
+
+    <script>
+        (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "ALpjA7Pu9YfymHwmVUs6-"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
+    </script>
+
+</body>
+
+</html>
