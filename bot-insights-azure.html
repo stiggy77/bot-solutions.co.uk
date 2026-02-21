@@ -1,0 +1,1762 @@
+<!-- bot-insights-azure.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>BOT-Insights | Azure Cost &amp; Optimisation | BOT-Solutions</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+        content="BOT-Insights Azure Cost & Optimisation (Beta): a structured first-pass Azure cost assessment with optimisation modelling, risk flags, action checklist, and a locally generated PDF summary.">
+
+    <link rel="canonical" href="https://bot-solutions.co.uk/bot-insights-azure.html">
+
+    <link rel="stylesheet" href="assets/css/site.css">
+
+    <!-- Page-local styles to support stepper UX (kept minimal; uses your existing tokens) -->
+    <style>
+        .insights-wrap {
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle step background shift (dark mode default) */
+        .insights-wrap[data-step="0"] {
+            background: linear-gradient(135deg, rgba(16, 31, 63, 0.20), rgba(11, 19, 36, 0.00));
+        }
+
+        .insights-wrap[data-step="1"] {
+            background: linear-gradient(135deg, rgba(31, 66, 130, 0.16), rgba(11, 19, 36, 0.00));
+        }
+
+        .insights-wrap[data-step="2"] {
+            background: linear-gradient(135deg, rgba(88, 130, 255, 0.10), rgba(11, 19, 36, 0.00));
+        }
+
+        .insights-wrap[data-step="3"] {
+            background: linear-gradient(135deg, rgba(22, 163, 74, 0.10), rgba(11, 19, 36, 0.00));
+        }
+
+        .insights-wrap[data-step="4"] {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.10), rgba(11, 19, 36, 0.00));
+        }
+
+        .insights-wrap[data-step="5"] {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.10), rgba(11, 19, 36, 0.00));
+        }
+
+        .insights-wrap[data-step="6"] {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(11, 19, 36, 0.00));
+        }
+
+        .insights-wrap[data-step="7"] {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.10), rgba(11, 19, 36, 0.00));
+        }
+
+        /* Light theme variants */
+        :root[data-theme="light"] .insights-wrap[data-step="0"] {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.08), rgba(255, 255, 255, 0.00));
+        }
+
+        :root[data-theme="light"] .insights-wrap[data-step="1"] {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(255, 255, 255, 0.00));
+        }
+
+        :root[data-theme="light"] .insights-wrap[data-step="2"] {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.07), rgba(255, 255, 255, 0.00));
+        }
+
+        :root[data-theme="light"] .insights-wrap[data-step="3"] {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.07), rgba(255, 255, 255, 0.00));
+        }
+
+        :root[data-theme="light"] .insights-wrap[data-step="4"] {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.06), rgba(255, 255, 255, 0.00));
+        }
+
+        :root[data-theme="light"] .insights-wrap[data-step="5"] {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.06), rgba(255, 255, 255, 0.00));
+        }
+
+        :root[data-theme="light"] .insights-wrap[data-step="6"] {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.07), rgba(255, 255, 255, 0.00));
+        }
+
+        :root[data-theme="light"] .insights-wrap[data-step="7"] {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.06), rgba(255, 255, 255, 0.00));
+        }
+
+        .tool-hero {
+            padding-top: 10px;
+        }
+
+        .tool-intro {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 18px;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .tool-intro {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 999px;
+            font-size: 0.92rem;
+        }
+
+        .tool-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .btn {
+            appearance: none;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: rgba(15, 26, 51, 0.55);
+            color: inherit;
+            border-radius: 12px;
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: transform 150ms ease, opacity 150ms ease;
+            font-weight: 600;
+        }
+
+        :root[data-theme="light"] .btn {
+            background: rgba(255, 255, 255, 0.65);
+            border-color: rgba(2, 6, 23, 0.12);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            border-color: rgba(56, 189, 248, 0.35);
+            box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.12) inset;
+        }
+
+        .btn-ghost {
+            background: transparent;
+        }
+
+        .stepper {
+            margin-top: 18px;
+        }
+
+        .progress-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .progress-bar {
+            position: relative;
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(148, 163, 184, 0.15);
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .progress-bar>span {
+            position: absolute;
+            inset: 0;
+            width: 0%;
+            background: rgba(56, 189, 248, 0.55);
+            transition: width 220ms ease;
+        }
+
+        .step-meta {
+            white-space: nowrap;
+            font-size: 0.95rem;
+            color: var(--muted2);
+        }
+
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .step-title h2 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .icon {
+            width: 34px;
+            height: 34px;
+            opacity: 0.9;
+        }
+
+        .panel {
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            background: rgba(15, 26, 51, 0.55);
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        :root[data-theme="light"] .panel {
+            background: rgba(255, 255, 255, 0.72);
+            border-color: rgba(2, 6, 23, 0.10);
+        }
+
+        .q {
+            margin-top: 14px;
+        }
+
+        .q label {
+            display: block;
+            font-weight: 650;
+            margin-bottom: 8px;
+        }
+
+        .q .hint {
+            margin-top: 6px;
+            color: var(--muted2);
+            font-size: 0.95rem;
+        }
+
+        .q input[type="text"],
+        .q input[type="number"],
+        .q select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: rgba(15, 26, 51, 0.35);
+            color: inherit;
+            outline: none;
+        }
+
+        :root[data-theme="light"] .q input[type="text"],
+        :root[data-theme="light"] .q input[type="number"],
+        :root[data-theme="light"] .q select {
+            background: rgba(255, 255, 255, 0.88);
+            border-color: rgba(2, 6, 23, 0.12);
+        }
+
+        .radio-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        @media (max-width: 720px) {
+            .radio-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .radio {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border: 1px solid rgba(148, 163, 184, 0.20);
+            border-radius: 12px;
+            background: rgba(15, 26, 51, 0.35);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        :root[data-theme="light"] .radio {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(2, 6, 23, 0.10);
+        }
+
+        .radio input {
+            accent-color: #38bdf8;
+        }
+
+        .step-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .step {
+            display: none;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 180ms ease, transform 180ms ease;
+        }
+
+        .step.is-active {
+            display: block;
+        }
+
+        .step.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .results {
+            display: none;
+            margin-top: 16px;
+        }
+
+        .results.is-active {
+            display: block;
+        }
+
+        .results .grid {
+            margin-top: 14px;
+        }
+
+        .score-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            color: var(--muted);
+            font-weight: 650;
+        }
+
+        .note {
+            color: var(--muted2);
+            font-size: 0.95rem;
+            margin-top: 10px;
+        }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 900px) {
+            .kpi-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .kpi {
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: 14px;
+            padding: 12px;
+            background: rgba(15, 26, 51, 0.35);
+        }
+
+        :root[data-theme="light"] .kpi {
+            background: rgba(255, 255, 255, 0.80);
+            border-color: rgba(2, 6, 23, 0.10);
+        }
+
+        .kpi .k {
+            font-size: 0.95rem;
+            color: var(--muted2);
+            margin-bottom: 6px;
+        }
+
+        .kpi .v {
+            font-size: 1.25rem;
+            font-weight: 750;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(148, 163, 184, 0.18);
+            margin: 18px 0;
+        }
+
+        .cta-card {
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            border-radius: 16px;
+            padding: 16px;
+            background: rgba(15, 26, 51, 0.55);
+        }
+
+        :root[data-theme="light"] .cta-card {
+            background: rgba(255, 255, 255, 0.72);
+            border-color: rgba(2, 132, 199, 0.20);
+        }
+
+        .small {
+            font-size: 0.95rem;
+            color: var(--muted2);
+        }
+    </style>
+
+    <!-- jsPDF for local PDF generation -->
+    <script defer src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container header-bar">
+
+            <a class="brand" href="index.html">
+                <img src="images/logo.png" alt="BOT-Solutions logo" class="logo-img">
+                <div>
+                    <div class="brand-name">BOT-Solutions</div>
+                    <div class="brand-tag">Business Operations, Technology &amp; Solutions</div>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="services.html">Services</a>
+                <a class="nav-link" href="resources.html">Resources</a>
+                <a class="nav-link is-active" href="tools.html">Tools</a>
+                <a class="nav-link" href="pricing.html">Pricing</a>
+                <a class="nav-link" href="contact.html">Contact</a>
+            </nav>
+
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">
+                🌙 Dark
+            </button>
+
+        </div>
+    </header>
+
+    <main class="insights-wrap" id="insightsWrap" data-step="0">
+
+        <section class="hero tool-hero">
+            <div class="container">
+
+                <div class="tool-intro">
+                    <div>
+                        <div class="eyebrow">BOT-Insights</div>
+
+                        <h1>Azure Cost &amp; Optimisation <span class="lede"><em>(Beta)</em></span></h1>
+
+                        <p class="lede">
+                            A structured first-pass Azure cost assessment with optimisation modelling, risk flags,
+                            and an action checklist you can use immediately.
+                        </p>
+
+                        <div class="badge" style="margin-top:12px;">
+                            <span>Privacy note:</span>
+                            <span class="small">processed locally in your browser — not stored on our servers</span>
+                        </div>
+
+                        <div class="tool-actions">
+                            <button class="btn btn-primary" id="startBtn">Start assessment</button>
+                            <a class="btn btn-ghost" href="tools.html"
+                                style="text-decoration:none; display:inline-flex; align-items:center;">Back to Tools</a>
+                        </div>
+
+                        <p class="note">
+                            7 steps (~2–5 minutes). Includes a locally generated PDF summary download.
+                            Subscription-level optimisation is available after results.
+                        </p>
+                    </div>
+
+                    <div class="hero-panel">
+                        <div class="panel-title">What you’ll get</div>
+                        <ul class="panel-list">
+                            <li>Estimated savings range (£ + %)</li>
+                            <li>Cost posture rating</li>
+                            <li>Top optimisation levers</li>
+                            <li>Risk flags</li>
+                            <li>Action checklist</li>
+                        </ul>
+                        <p class="lede">Built for admins who need clarity fast.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <!-- Stepper -->
+                <div class="stepper" id="stepper" style="display:none;">
+
+                    <div class="progress-row">
+                        <div class="progress-bar" aria-label="Progress">
+                            <span id="progressFill"></span>
+                        </div>
+                        <div class="step-meta" id="stepMeta">Step 1 of 7</div>
+                    </div>
+
+                    <div class="panel">
+
+                        <!-- Step 1 -->
+                        <div class="step is-active" id="step1" data-step="1">
+                            <div class="step-title">
+                                <!-- minimal line icon: cloud/region -->
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M7 18h10a4 4 0 0 0 0-8 5 5 0 0 0-9.7-1.3A4 4 0 0 0 7 18Z"
+                                        stroke="currentColor" stroke-width="1.6" />
+                                    <path d="M12 3v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="1.6"
+                                        stroke-linecap="round" />
+                                </svg>
+                                <div>
+                                    <h2>Environment Context</h2>
+                                    <div class="small">Set the baseline for modelling.</div>
+                                </div>
+                            </div>
+
+                            <div class="q">
+                                <label for="monthlySpend">Approx monthly Azure spend (GBP)</label>
+                                <input type="text" id="monthlySpend" inputmode="decimal" placeholder="e.g. 750">
+                                <div class="hint">Enter an approximate monthly average (numbers only).</div>
+                            </div>
+
+                            <div class="q">
+                                <label for="region">Primary region</label>
+                                <select id="region">
+                                    <option value="">Select…</option>
+                                    <option>UK South</option>
+                                    <option>UK West</option>
+                                    <option>Other / mixed</option>
+                                </select>
+                            </div>
+
+                            <div class="q">
+                                <label for="envMix">Environment mix</label>
+                                <select id="envMix">
+                                    <option value="">Select…</option>
+                                    <option>Prod</option>
+                                    <option>Dev/Test</option>
+                                    <option>Mixed</option>
+                                </select>
+                            </div>
+
+                            <div class="step-actions">
+                                <span></span>
+                                <button class="btn btn-primary" data-next="2">Next</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="step" id="step2" data-step="2">
+                            <div class="step-title">
+                                <!-- server icon -->
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M6 7h12v4H6V7Z" stroke="currentColor" stroke-width="1.6" />
+                                    <path d="M6 13h12v4H6v-4Z" stroke="currentColor" stroke-width="1.6" />
+                                    <path d="M8 9h2M8 15h2" stroke="currentColor" stroke-width="1.6"
+                                        stroke-linecap="round" />
+                                </svg>
+                                <div>
+                                    <h2>Compute Footprint</h2>
+                                    <div class="small">High-level VM footprint and run pattern.</div>
+                                </div>
+                            </div>
+
+                            <div class="q">
+                                <label for="winVms">Windows VM count</label>
+                                <select id="winVms">
+                                    <option value="">Select…</option>
+                                    <option value="0">0</option>
+                                    <option value="1-3">1–3</option>
+                                    <option value="4-10">4–10</option>
+                                    <option value="11-25">11–25</option>
+                                    <option value="26+">26+</option>
+                                </select>
+                            </div>
+
+                            <div class="q">
+                                <label for="linVms">Linux VM count</label>
+                                <select id="linVms">
+                                    <option value="">Select…</option>
+                                    <option value="0">0</option>
+                                    <option value="1-3">1–3</option>
+                                    <option value="4-10">4–10</option>
+                                    <option value="11-25">11–25</option>
+                                    <option value="26+">26+</option>
+                                </select>
+                            </div>
+
+                            <div class="q">
+                                <label for="runPattern">Typical run pattern</label>
+                                <select id="runPattern">
+                                    <option value="">Select…</option>
+                                    <option>24/7</option>
+                                    <option>Business hours</option>
+                                    <option>Mixed</option>
+                                </select>
+                            </div>
+
+                            <div class="step-actions">
+                                <button class="btn btn-ghost" data-back="1">Back</button>
+                                <button class="btn btn-primary" data-next="3">Next</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="step" id="step3" data-step="3">
+                            <div class="step-title">
+                                <!-- gauge icon -->
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M4 14a8 8 0 1 1 16 0" stroke="currentColor" stroke-width="1.6"
+                                        stroke-linecap="round" />
+                                    <path d="M12 14l4-4" stroke="currentColor" stroke-width="1.6"
+                                        stroke-linecap="round" />
+                                    <path d="M7 14h10" stroke="currentColor" stroke-width="1.6"
+                                        stroke-linecap="round" />
+                                </svg>
+                                <div>
+                                    <h2>Utilisation Signals</h2>
+                                    <div class="small">Used to estimate rightsizing potential.</div>
+                                </div>
+                            </div>
+
+                            <div class="q">
+                                <label for="cpuAvg">Average CPU utilisation</label>
+                                <select id="cpuAvg">
+                                    <option value="">Select…</option>
+                                    <option>&lt;10%</option>
+                                    <option>10–30%</option>
+                                    <option>30–60%</option>
+                                    <option>60%+</option>
+                                    <option>Unknown</option>
+                                </select>
+                            </div>
+
+                            <div class="q">
+                                <label for="memAvg">Average memory utilisation</label>
+                                <select id="memAvg">
+                                    <option value="">Select…</option>
+                                    <option>&lt;30%</option>
+                                    <option>30–60%</option>
+                                    <option>60%+</option>
+                                    <option>Unknown</option>
+                                </select>
+                            </div>
+
+                            <div class="q">
+                                <label for="shape">Workload shape</label>
+                                <select id="shape">
+                                    <option value="">Select…</option>
+                                    <option>Flat</option>
+                                    <option>Spiky</option>
+                                    <option>Unknown</option>
+                                </select>
+                            </div>
+
+                            <div class="step-actions">
+                                <button class="btn btn-ghost" data-back="2">Back</button>
+                                <button class="btn btn-primary" data-next="4">Next</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="step" id="step4" data-step="4">
+                            <div class="step-title">
+                                <!-- savings icon -->
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M12 3v2M12 19v2" stroke="currentColor" stroke-width="1.6"
+                                        stroke-linecap="round" />
+                                    <path
+                                        d="M16 7.5c0-1.4-1.8-2.5-4-2.5s-4 1.1-4 2.5 1.2 2 4 2 4 .6 4 2-1.8 2.5-4 2.5-4-1.1-4-2.5"
+                                        stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                                </svg>
+                                <div>
+                                    <h2>Savings Levers</h2>
+                                    <div class="small">Scheduling, autoscale, and commitments.</div>
+                                </div>
+                            </div>
+
+                            <div class="q">
+                                <label for="nonProdAlwaysOn">Non-prod always on?</label>
+                                <select id="nonProdAlwaysOn">
+                                    <option value="">Select…</option>
+                                    <option>Yes</option>
+                                    <option>No</option>
+                                    <option>Unsure</option>
+                                </select>
+                            </div>
+
+                            <div class="q">
+                                <label for="autoscale">Autoscale used anywhere?</label>
+                                <select id="autoscale">
+                                    <option value="">Select…</option>
+                                    <option>Yes</option>
+                                    <option>No</option>
+                                    <option>Unsure</option>
+                                </select>
+                            </div>
+
+                            <div class="q">
+                                <label for="commitments">Savings Plans / Reserved Instances</label>
+                                <select id="commitments">
+                                    <option value="">Select…</option>
+                                    <option>None</option>
+                                    <option>Some</option>
+                                    <option>Unsure</option>
+                                </select>
+                            </div>
+
+                            <div class="step-actions">
+                                <button class="btn btn-ghost" data-back="3">Back</button>
+                                <button class="btn btn-primary" data-next="5">Next</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="step" id="step5" data-step="5">
+                            <div class="step-title">
+                                <!-- storage icon -->
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M4 7c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3Z" stroke="currentColor"
+                                        stroke-width="1.6" />
+                                    <path d="M4 7v5c0 1.7 3.6 3 8 3s8-1.3 8-3V7" stroke="currentColor"
+                                        stroke-width="1.6" />
+                                    <path d="M4 12v5c0 1.7 3.6 3 8 3s8-1.3 8-3v-5" stroke="currentColor"
+                                        stroke-width="1.6" />
+                                </svg>
+                                <div>
+                                    <h2>Storage &amp; Backup</h2>
+                                    <div class="small">Disk tiers, volume and backup posture.</div>
+                                </div>
+                            </div>
+
+                            <div class="q">
+                                <label for="diskTier">Disk tiers mostly used</label>
+                                <select id="diskTier">
+                                    <option value="">Select…</option>
+                                    <option>Standard HDD</option>
+                                    <option>Standard SSD</option>
+                                    <option>Premium SSD</option>
+                                    <option>Mixed</option>
+                                    <option>Unsure</option>
+                                </select>
+                            </div>
+
+                            <div class="q">
+                                <label for="diskCap">Total managed disk capacity (approx)</label>
+                                <select id="diskCap">
+                                    <option value="">Select…</option>
+                                    <option>&lt;500GB</option>
+                                    <option>500GB–2TB</option>
+                                    <option>2TB–10TB</option>
+                                    <option>10TB+</option>
+                                    <option>Unsure</option>
+                                </select>
+                            </div>
+
+                            <div class="q">
+                                <label for="backups">Recovery Services Vault backups in use?</label>
+                                <select id="backups">
+                                    <option value="">Select…</option>
+                                    <option>Yes</option>
+                                    <option>No</option>
+                                    <option>Unsure</option>
+                                </select>
+                            </div>
+
+                            <div class="step-actions">
+                                <button class="btn btn-ghost" data-back="4">Back</button>
+                                <button class="btn btn-primary" data-next="6">Next</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 6 -->
+                        <div class="step" id="step6" data-step="6">
+                            <div class="step-title">
+                                <!-- archive icon -->
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M5 7h14v4H5V7Z" stroke="currentColor" stroke-width="1.6" />
+                                    <path d="M6 11v9h12v-9" stroke="currentColor" stroke-width="1.6" />
+                                    <path d="M10 15h4" stroke="currentColor" stroke-width="1.6"
+                                        stroke-linecap="round" />
+                                </svg>
+                                <div>
+                                    <h2>Retention &amp; Tiering</h2>
+                                    <div class="small">Snapshots, retention, and blob storage posture.</div>
+                                </div>
+                            </div>
+
+                            <div class="q">
+                                <label for="snapshots">Snapshots used?</label>
+                                <select id="snapshots">
+                                    <option value="">Select…</option>
+                                    <option>Yes</option>
+                                    <option>No</option>
+                                    <option>Unsure</option>
+                                </select>
+                            </div>
+
+                            <div class="q">
+                                <label for="retention">Typical retention</label>
+                                <select id="retention">
+                                    <option value="">Select…</option>
+                                    <option>7 days</option>
+                                    <option>14 days</option>
+                                    <option>30 days</option>
+                                    <option>90+ days</option>
+                                    <option>Unsure</option>
+                                </select>
+                            </div>
+
+                            <div class="q">
+                                <label for="blobTiering">Blob storage tiering in use?</label>
+                                <select id="blobTiering">
+                                    <option value="">Select…</option>
+                                    <option>Hot only</option>
+                                    <option>Hot + Cool</option>
+                                    <option>Includes Archive</option>
+                                    <option>Unsure</option>
+                                    <option>Not used</option>
+                                </select>
+                            </div>
+
+                            <div class="step-actions">
+                                <button class="btn btn-ghost" data-back="5">Back</button>
+                                <button class="btn btn-primary" data-next="7">Next</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 7 -->
+                        <div class="step" id="step7" data-step="7">
+                            <div class="step-title">
+                                <!-- shield/tag icon -->
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M12 3l7 4v6c0 5-3 8-7 9-4-1-7-4-7-9V7l7-4Z" stroke="currentColor"
+                                        stroke-width="1.6" />
+                                    <path d="M9 12h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                                </svg>
+                                <div>
+                                    <h2>Governance &amp; Licensing</h2>
+                                    <div class="small">Controls that prevent waste and surprises.</div>
+                                </div>
+                            </div>
+
+                            <div class="q">
+                                <label for="tagging">Tagging coverage</label>
+                                <select id="tagging">
+                                    <option value="">Select…</option>
+                                    <option>High</option>
+                                    <option>Medium</option>
+                                    <option>Low</option>
+                                    <option>None</option>
+                                    <option>Unsure</option>
+                                </select>
+                            </div>
+
+                            <div class="q">
+                                <label for="budgets">Budgets + alerts configured?</label>
+                                <select id="budgets">
+                                    <option value="">Select…</option>
+                                    <option>Yes</option>
+                                    <option>No</option>
+                                    <option>Unsure</option>
+                                </select>
+                            </div>
+
+                            <div class="q">
+                                <label for="ahb">Azure Hybrid Benefit (Windows/SQL)</label>
+                                <select id="ahb">
+                                    <option value="">Select…</option>
+                                    <option>Yes</option>
+                                    <option>No</option>
+                                    <option>Unsure</option>
+                                </select>
+                            </div>
+
+                            <div class="step-actions">
+                                <button class="btn btn-ghost" data-back="6">Back</button>
+                                <button class="btn btn-primary" id="generateBtn">Generate results</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="results" id="results">
+                    <div class="panel">
+                        <div class="step-title">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M6 18V6m0 12h12" stroke="currentColor" stroke-width="1.6"
+                                    stroke-linecap="round" />
+                                <path d="M8 14l3-3 2 2 5-6" stroke="currentColor" stroke-width="1.6"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div>
+                                <h2>Assessment Summary</h2>
+                                <div class="small">Modelling-based first pass (no subscription data required).</div>
+                            </div>
+                        </div>
+
+                        <div id="headlineBlock" class="note" style="margin-top:10px;"></div>
+
+                        <div class="kpi-row">
+                            <div class="kpi">
+                                <div class="k">Cost posture</div>
+                                <div class="v" id="posture">—</div>
+                            </div>
+                            <div class="kpi">
+                                <div class="k">Estimated optimisation range</div>
+                                <div class="v" id="savingsRange">—</div>
+                                <div class="small" id="savingsPct" style="margin-top:6px;"></div>
+                            </div>
+                            <div class="kpi">
+                                <div class="k">Confidence</div>
+                                <div class="v" id="confidence">—</div>
+                                <div class="small" id="confidenceNote" style="margin-top:6px;"></div>
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <h3 style="margin-top:0;">Key optimisation levers</h3>
+                        <div class="grid" id="leversGrid"></div>
+
+                        <div class="divider"></div>
+
+                        <h3 style="margin-top:0;">Action checklist</h3>
+                        <ul class="panel-list" id="actionsList"></ul>
+
+                        <div class="divider"></div>
+
+                        <div class="tool-actions" style="justify-content:flex-start;">
+                            <button class="btn btn-primary" id="pdfBtn">Download summary (PDF)</button>
+                            <button class="btn btn-ghost" id="copyBtn">Copy actions</button>
+                        </div>
+
+                        <p class="note" id="privacyNote">
+                            Download is generated locally in your browser. Assessment answers are not stored on our
+                            servers.
+                        </p>
+
+                        <div class="divider"></div>
+
+                        <div class="cta-card">
+                            <h3 style="margin-top:0;">Next step: Subscription-level review</h3>
+                            <p class="lede" style="margin-top:6px;">
+                                This first pass is based on structured modelling assumptions. Precise optimisation
+                                requires billing exports,
+                                resource inventory, and utilisation evidence.
+                            </p>
+
+                            <ul class="panel-list">
+                                <li>Billing export analysis (last ~90 days)</li>
+                                <li>Resource inventory &amp; SKU review</li>
+                                <li>Rightsizing identification</li>
+                                <li>Savings Plan vs RI modelling</li>
+                                <li>Storage &amp; backup cost review</li>
+                                <li>Prioritised optimisation roadmap</li>
+                            </ul>
+
+                            <p class="lede" style="margin-top:12px;">
+                                <strong>Fixed fee: £395</strong><br>
+                                Optional 30-minute Microsoft Teams session: <strong>£95</strong>
+                            </p>
+
+                            <div class="tool-actions">
+                                <a class="btn btn-primary" href="contact.html" style="text-decoration:none;">
+                                    Request detailed review
+                                </a>
+                                <a class="btn btn-ghost" href="tools.html" style="text-decoration:none;">
+                                    Back to Tools
+                                </a>
+                            </div>
+
+                            <p class="note" style="margin-top:10px;">
+                                Consultant deliverables are produced separately and stored privately (not within this
+                                site).
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>© 2026 BOT-Solutions</div>
+            <div>
+                Automation and reporting that works. |
+                <a href="cookies.html">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Theme Toggle Script (same as index) -->
+    <script>
+        (function () {
+            const root = document.documentElement;
+            const toggle = document.getElementById("themeToggle");
+
+            if (!toggle) return;
+
+            const savedTheme = localStorage.getItem("theme");
+
+            if (savedTheme) {
+                if (savedTheme === "light") root.setAttribute("data-theme", "light");
+                else root.removeAttribute("data-theme");
+            } else {
+                const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+                if (!prefersDark) root.setAttribute("data-theme", "light");
+            }
+
+            function updateButton() {
+                const current = root.getAttribute("data-theme");
+                toggle.textContent = current === "light" ? "🌞 Light" : "🌙 Dark";
+            }
+
+            updateButton();
+
+            toggle.addEventListener("click", function () {
+                const current = root.getAttribute("data-theme");
+                const newTheme = current === "light" ? "dark" : "light";
+
+                if (newTheme === "light") {
+                    root.setAttribute("data-theme", "light");
+                    localStorage.setItem("theme", "light");
+                } else {
+                    root.removeAttribute("data-theme");
+                    localStorage.setItem("theme", "dark");
+                }
+
+                updateButton();
+            });
+        })();
+    </script>
+
+    <!-- Tool logic -->
+    <script>
+        (function () {
+            const wrap = document.getElementById("insightsWrap");
+            const startBtn = document.getElementById("startBtn");
+            const stepper = document.getElementById("stepper");
+            const progressFill = document.getElementById("progressFill");
+            const stepMeta = document.getElementById("stepMeta");
+            const results = document.getElementById("results");
+            const generateBtn = document.getElementById("generateBtn");
+            const pdfBtn = document.getElementById("pdfBtn");
+            const copyBtn = document.getElementById("copyBtn");
+
+            const steps = [
+                document.getElementById("step1"),
+                document.getElementById("step2"),
+                document.getElementById("step3"),
+                document.getElementById("step4"),
+                document.getElementById("step5"),
+                document.getElementById("step6"),
+                document.getElementById("step7"),
+            ];
+
+            const titles = [
+                "Environment Context",
+                "Compute Footprint",
+                "Utilisation Signals",
+                "Savings Levers",
+                "Storage & Backup",
+                "Retention & Tiering",
+                "Governance & Licensing"
+            ];
+
+            const fields = {
+                monthlySpend: () => document.getElementById("monthlySpend").value,
+                region: () => document.getElementById("region").value,
+                envMix: () => document.getElementById("envMix").value,
+
+                winVms: () => document.getElementById("winVms").value,
+                linVms: () => document.getElementById("linVms").value,
+                runPattern: () => document.getElementById("runPattern").value,
+
+                cpuAvg: () => document.getElementById("cpuAvg").value,
+                memAvg: () => document.getElementById("memAvg").value,
+                shape: () => document.getElementById("shape").value,
+
+                nonProdAlwaysOn: () => document.getElementById("nonProdAlwaysOn").value,
+                autoscale: () => document.getElementById("autoscale").value,
+                commitments: () => document.getElementById("commitments").value,
+
+                diskTier: () => document.getElementById("diskTier").value,
+                diskCap: () => document.getElementById("diskCap").value,
+                backups: () => document.getElementById("backups").value,
+
+                snapshots: () => document.getElementById("snapshots").value,
+                retention: () => document.getElementById("retention").value,
+                blobTiering: () => document.getElementById("blobTiering").value,
+
+                tagging: () => document.getElementById("tagging").value,
+                budgets: () => document.getElementById("budgets").value,
+                ahb: () => document.getElementById("ahb").value,
+            };
+
+            let current = 1;
+
+            function toNumberGBP(raw) {
+                const s = String(raw || "").replace(/[,£\s]/g, "");
+                const n = Number(s);
+                if (!isFinite(n)) return null;
+                return n;
+            }
+
+            function formatGBP(n) {
+                try {
+                    return new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 0 }).format(n);
+                } catch {
+                    return "£" + Math.round(n).toString();
+                }
+            }
+
+            function clamp(n, min, max) {
+                return Math.max(min, Math.min(max, n));
+            }
+
+            function setStep(idx) {
+                current = idx;
+                const stepIndex = idx - 1;
+
+                // Update background shift
+                wrap.setAttribute("data-step", String(idx));
+
+                // Progress (1..7)
+                const pct = (idx - 1) / 7 * 100;
+                progressFill.style.width = pct + "%";
+                stepMeta.textContent = `Step ${idx} of 7`;
+
+                // Show only current step
+                steps.forEach((el, i) => {
+                    el.classList.remove("is-active", "is-visible");
+                    if (i === stepIndex) {
+                        el.classList.add("is-active");
+                        // allow layout, then animate
+                        requestAnimationFrame(() => el.classList.add("is-visible"));
+                    }
+                });
+            }
+
+            function validateStep(idx) {
+                // Keep it strict only where necessary. "Unknown/Unsure" is valid.
+                if (idx === 1) {
+                    const spend = toNumberGBP(fields.monthlySpend());
+                    const region = fields.region();
+                    const envMix = fields.envMix();
+                    if (!spend || spend <= 0) return { ok: false, msg: "Please enter your approximate monthly Azure spend." };
+                    if (!region) return { ok: false, msg: "Please select a primary region." };
+                    if (!envMix) return { ok: false, msg: "Please select an environment mix." };
+                }
+                if (idx === 2) {
+                    if (!fields.winVms()) return { ok: false, msg: "Select a Windows VM count." };
+                    if (!fields.linVms()) return { ok: false, msg: "Select a Linux VM count." };
+                    if (!fields.runPattern()) return { ok: false, msg: "Select a typical run pattern." };
+                }
+                if (idx === 3) {
+                    if (!fields.cpuAvg()) return { ok: false, msg: "Select an average CPU utilisation band." };
+                    if (!fields.memAvg()) return { ok: false, msg: "Select an average memory utilisation band." };
+                    if (!fields.shape()) return { ok: false, msg: "Select a workload shape." };
+                }
+                if (idx === 4) {
+                    if (!fields.nonProdAlwaysOn()) return { ok: false, msg: "Select whether non-prod is always on." };
+                    if (!fields.autoscale()) return { ok: false, msg: "Select whether autoscale is used." };
+                    if (!fields.commitments()) return { ok: false, msg: "Select Savings Plans / Reserved Instances status." };
+                }
+                if (idx === 5) {
+                    if (!fields.diskTier()) return { ok: false, msg: "Select a disk tier." };
+                    if (!fields.diskCap()) return { ok: false, msg: "Select a disk capacity band." };
+                    if (!fields.backups()) return { ok: false, msg: "Select backup status." };
+                }
+                if (idx === 6) {
+                    if (!fields.snapshots()) return { ok: false, msg: "Select snapshot usage." };
+                    if (!fields.retention()) return { ok: false, msg: "Select a retention band." };
+                    if (!fields.blobTiering()) return { ok: false, msg: "Select blob tiering status." };
+                }
+                if (idx === 7) {
+                    if (!fields.tagging()) return { ok: false, msg: "Select tagging coverage." };
+                    if (!fields.budgets()) return { ok: false, msg: "Select budgets + alerts status." };
+                    if (!fields.ahb()) return { ok: false, msg: "Select Azure Hybrid Benefit status." };
+                }
+                return { ok: true, msg: "" };
+            }
+
+            function alertInline(msg) {
+                // Simple and consistent with your design: use a quick alert for v1.
+                // If you want, we can later swap to a toast panel.
+                window.alert(msg);
+            }
+
+            function estimateShares() {
+                // Approximate compute vs storage share using VM counts + disk capacity band.
+                // Keep it simple and conservative.
+                const spend = toNumberGBP(fields.monthlySpend()) || 0;
+
+                const vmTotalBand = (fields.winVms() === "26+" ? 30 :
+                    fields.winVms() === "11-25" ? 18 :
+                        fields.winVms() === "4-10" ? 7 :
+                            fields.winVms() === "1-3" ? 2 : 0)
+                    +
+                    (fields.linVms() === "26+" ? 30 :
+                        fields.linVms() === "11-25" ? 18 :
+                            fields.linVms() === "4-10" ? 7 :
+                                fields.linVms() === "1-3" ? 2 : 0);
+
+                const diskCap = fields.diskCap();
+                const diskWeight = diskCap.includes("10TB") ? 0.35 :
+                    diskCap.includes("2TB") ? 0.25 :
+                        diskCap.includes("500GB") ? 0.18 :
+                            diskCap.includes("<500GB") ? 0.12 : 0.18;
+
+                // base compute share
+                let computeShare = 0.62;
+                if (vmTotalBand >= 20) computeShare = 0.70;
+                if (vmTotalBand <= 4) computeShare = 0.55;
+
+                // increase storage share with diskWeight
+                let storageShare = clamp(1 - computeShare + diskWeight, 0.20, 0.45);
+                computeShare = clamp(1 - storageShare, 0.55, 0.80);
+
+                return {
+                    spend,
+                    computeSpend: spend * computeShare,
+                    storageSpend: spend * storageShare,
+                    otherSpend: spend * (1 - computeShare - storageShare)
+                };
+            }
+
+            function confidenceLevel() {
+                const vals = [
+                    fields.cpuAvg(), fields.memAvg(), fields.shape(),
+                    fields.nonProdAlwaysOn(), fields.autoscale(), fields.commitments(),
+                    fields.diskTier(), fields.diskCap(), fields.backups(),
+                    fields.snapshots(), fields.retention(), fields.blobTiering(),
+                    fields.tagging(), fields.budgets(), fields.ahb(),
+                    fields.runPattern(), fields.winVms(), fields.linVms(),
+                    fields.region(), fields.envMix(),
+                ];
+
+                const unknownCount = vals.filter(v => {
+                    const s = String(v || "").toLowerCase();
+                    return s.includes("unknown") || s.includes("unsure") || s === "";
+                }).length;
+
+                if (unknownCount <= 3) return { level: "High", note: "Good input coverage across key areas." };
+                if (unknownCount <= 7) return { level: "Moderate", note: "Some unknowns reduce estimate precision." };
+                return { level: "Low", note: "Many unknowns — results are indicative only." };
+            }
+
+            function scoreOutOf100() {
+                let score = 100;
+
+                const run = fields.runPattern();
+                const cpu = fields.cpuAvg();
+                const mem = fields.memAvg();
+                const nonProd = fields.nonProdAlwaysOn();
+                const autoscale = fields.autoscale();
+                const shape = fields.shape();
+                const commit = fields.commitments();
+                const diskTier = fields.diskTier();
+                const diskCap = fields.diskCap();
+                const backups = fields.backups();
+                const snaps = fields.snapshots();
+                const retention = fields.retention();
+                const tagging = fields.tagging();
+                const budgets = fields.budgets();
+                const ahb = fields.ahb();
+
+                // Compute posture
+                if (run === "24/7" && cpu === "<10%") score -= 18;
+                else if (run === "24/7" && cpu === "10–30%") score -= 10;
+
+                if (mem === "60%+") score -= 6;
+
+                if (nonProd === "Yes") score -= 12;
+
+                if (shape === "Spiky" && autoscale === "No") score -= 8;
+
+                // Commitments & licensing
+                if (run === "24/7" && commit === "None") score -= 12;
+                if (ahb === "No") score -= 6;
+
+                // Storage & backup
+                const largeStorage = diskCap.includes("2TB") || diskCap.includes("10TB");
+                if (diskTier === "Premium SSD" && largeStorage) score -= 10;
+                if (backups === "No") score -= 12;
+
+                // Snapshots & retention hygiene
+                if (snaps === "Yes" && retention === "90+ days") score -= 6;
+
+                // Governance
+                if (tagging === "Low") score -= 10;
+                if (tagging === "None") score -= 14;
+                if (budgets === "No") score -= 8;
+
+                return clamp(score, 0, 100);
+            }
+
+            function postureFromScore(score) {
+                if (score >= 85) return "Strong";
+                if (score >= 65) return "Moderate";
+                return "Needs attention";
+            }
+
+            function buildLeversAndActions() {
+                const shares = estimateShares();
+                const spend = shares.spend;
+
+                // Default to conservative split for "other" (network, PaaS, etc.)
+                const computeBase = shares.computeSpend;
+                const storageBase = shares.storageSpend;
+
+                const run = fields.runPattern();
+                const cpu = fields.cpuAvg();
+                const mem = fields.memAvg();
+                const nonProd = fields.nonProdAlwaysOn();
+                const commit = fields.commitments();
+                const diskTier = fields.diskTier();
+                const diskCap = fields.diskCap();
+                const backups = fields.backups();
+                const tagging = fields.tagging();
+                const budgets = fields.budgets();
+                const autoscale = fields.autoscale();
+                const shape = fields.shape();
+                const ahb = fields.ahb();
+
+                const levers = [];
+                const actions = [];
+
+                // Rightsizing
+                let rightLow = 0, rightHigh = 0;
+                if (run === "24/7") {
+                    if (cpu === "<10%") { rightLow = 0.15; rightHigh = 0.30; }
+                    else if (cpu === "10–30%") { rightLow = 0.10; rightHigh = 0.20; }
+                    else if (cpu === "30–60%") { rightLow = 0.03; rightHigh = 0.10; }
+                }
+                if (rightHigh > 0) {
+                    levers.push({
+                        title: "Rightsizing potential",
+                        desc: "Compute appears overprovisioned relative to typical utilisation bands.",
+                        impact: rightHigh >= 0.20 ? "High" : "Medium"
+                    });
+                    actions.push("Review top compute consumers and validate sizing against CPU/memory baselines.");
+                    actions.push("Where safe, downsize VM SKUs or move to better-fit families (with change control).");
+                }
+
+                // Scheduling
+                let schedLow = 0, schedHigh = 0;
+                if (nonProd === "Yes") {
+                    schedLow = 0.20; schedHigh = 0.60;
+                    levers.push({
+                        title: "Scheduling opportunity",
+                        desc: "Non-prod always-on typically has quick win savings via schedules.",
+                        impact: "High"
+                    });
+                    actions.push("Implement VM schedules for non-prod workloads (shutdown out-of-hours).");
+                } else if (run === "Business hours") {
+                    schedLow = 0.10; schedHigh = 0.30;
+                    levers.push({
+                        title: "Scheduling opportunity",
+                        desc: "Business-hours patterns often benefit from consistent start/stop automation.",
+                        impact: "Medium"
+                    });
+                    actions.push("Validate run schedules and enforce consistent out-of-hours shutdown where appropriate.");
+                }
+
+                // Commitments
+                let commLow = 0, commHigh = 0;
+                if (run === "24/7" && commit === "None") {
+                    commLow = 0.15; commHigh = 0.40;
+                    levers.push({
+                        title: "Commitment modelling",
+                        desc: "Steady compute may benefit from Savings Plans or Reserved Instances.",
+                        impact: "High"
+                    });
+                    actions.push("Model Savings Plans vs Reserved Instances for steady compute (start small, validate utilisation).");
+                } else if (commit === "Unsure") {
+                    levers.push({
+                        title: "Commitment visibility",
+                        desc: "Confirm if Savings Plans / RIs are in place and whether they’re fully utilised.",
+                        impact: "Medium"
+                    });
+                    actions.push("Review commitment coverage and utilisation to avoid paying for unused reservations.");
+                }
+
+                // Storage tiering
+                let storLow = 0, storHigh = 0;
+                const largeStorage = diskCap.includes("2TB") || diskCap.includes("10TB");
+                if (diskTier === "Premium SSD" && largeStorage) {
+                    storLow = 0.05; storHigh = 0.15;
+                    levers.push({
+                        title: "Storage tiering",
+                        desc: "Premium disks across larger volumes can drive avoidable cost.",
+                        impact: "Medium"
+                    });
+                    actions.push("Review disk tiers and performance requirements; move eligible disks to Standard SSD.");
+                    actions.push("Review snapshot and backup retention where storage is growing.");
+                }
+
+                // Governance / waste
+                let govLow = 0, govHigh = 0;
+                if (tagging === "Low" || tagging === "None" || budgets === "No") {
+                    govLow = 0.03; govHigh = 0.10;
+                    levers.push({
+                        title: "Governance / waste reduction",
+                        desc: "Cost controls and tagging reduce drift and unowned resource spend.",
+                        impact: (tagging === "None" || budgets === "No") ? "Medium" : "Low"
+                    });
+                    if (budgets === "No") actions.push("Set subscription budgets and alerts to prevent surprises.");
+                    if (tagging === "Low" || tagging === "None") actions.push("Introduce a minimal tagging policy (Owner, Environment, CostCentre) and enforce it.");
+                }
+
+                // Backup risk
+                if (backups === "No") {
+                    levers.push({
+                        title: "Backup posture risk",
+                        desc: "Backups appear absent — cost optimisation must not increase recovery risk.",
+                        impact: "High"
+                    });
+                    actions.push("Confirm backup coverage and restore testing for production workloads.");
+                }
+
+                // Autoscale note
+                if (shape === "Spiky" && autoscale !== "Yes") {
+                    levers.push({
+                        title: "Scale strategy",
+                        desc: "Spiky workloads without autoscale may benefit from elasticity approaches.",
+                        impact: "Medium"
+                    });
+                    actions.push("Assess autoscale where workloads are spiky (or move candidates to PaaS where appropriate).");
+                }
+
+                // AHB note
+                if (ahb === "Unsure") {
+                    levers.push({
+                        title: "Licensing validation",
+                        desc: "Azure Hybrid Benefit eligibility can materially impact Windows/SQL cost.",
+                        impact: "Medium"
+                    });
+                    actions.push("Confirm Azure Hybrid Benefit eligibility for Windows/SQL workloads.");
+                } else if (ahb === "No") {
+                    levers.push({
+                        title: "Licensing opportunity",
+                        desc: "If eligible, Azure Hybrid Benefit may reduce Windows/SQL compute cost.",
+                        impact: "Medium"
+                    });
+                    actions.push("If eligible, enable Azure Hybrid Benefit on applicable Windows/SQL resources.");
+                }
+
+                // Always include a couple of sensible baseline actions
+                actions.push("Review Azure Advisor recommendations monthly and track closure of high-impact items.");
+                actions.push("Implement a simple cost review cadence (monthly) with a short change log of major spend drivers.");
+
+                // Estimate savings range (conservative stacking)
+                const computePotentialLow = computeBase * (rightLow + schedLow + commLow);
+                const computePotentialHigh = computeBase * (rightHigh + schedHigh + commHigh);
+
+                const storagePotentialLow = storageBase * storLow;
+                const storagePotentialHigh = storageBase * storHigh;
+
+                const govPotentialLow = spend * govLow;
+                const govPotentialHigh = spend * govHigh;
+
+                // Conservative stacking: do not fully add highs; reduce overlap.
+                const rawLow = computePotentialLow + storagePotentialLow + govPotentialLow;
+                const rawHigh = computePotentialHigh + storagePotentialHigh + govPotentialHigh;
+
+                // Cap high estimate to keep credibility (unless very bad posture).
+                const score = scoreOutOf100();
+                const capPct = score < 65 ? 0.40 : 0.35;
+                const cappedHigh = Math.min(rawHigh, spend * capPct);
+
+                // Low estimate should stay conservative
+                const low = Math.min(rawLow, cappedHigh * 0.75);
+
+                return {
+                    levers,
+                    actions: dedupe(actions),
+                    low: Math.max(0, low),
+                    high: Math.max(low, cappedHigh),
+                };
+            }
+
+            function dedupe(arr) {
+                const seen = new Set();
+                const out = [];
+                for (const s of arr) {
+                    const k = String(s).trim();
+                    if (!k) continue;
+                    const key = k.toLowerCase();
+                    if (seen.has(key)) continue;
+                    seen.add(key);
+                    out.push(k);
+                }
+                return out;
+            }
+
+            function renderResults() {
+                const score = scoreOutOf100();
+                const posture = postureFromScore(score);
+                const conf = confidenceLevel();
+                const shares = estimateShares();
+                const spend = shares.spend;
+
+                const model = buildLeversAndActions();
+                const low = model.low;
+                const high = model.high;
+
+                const lowPct = spend > 0 ? (low / spend) * 100 : 0;
+                const highPct = spend > 0 ? (high / spend) * 100 : 0;
+
+                // Headline messaging based on posture (your idea)
+                const headlineBlock = document.getElementById("headlineBlock");
+                if (posture === "Needs attention") {
+                    headlineBlock.textContent =
+                        "Your environment shows clear optimisation opportunities. A subscription-level review is recommended to quantify savings precisely and prioritise actions.";
+                } else if (posture === "Moderate") {
+                    headlineBlock.textContent =
+                        "There are identifiable savings levers and a few governance gaps. A detailed review can refine estimates and provide an execution-ready plan.";
+                } else {
+                    headlineBlock.textContent =
+                        "Good posture overall — nice work. A detailed review can still validate commitment strategy and catch smaller wins that are easy to miss.";
+                }
+
+                document.getElementById("posture").textContent = posture;
+                document.getElementById("savingsRange").textContent = `${formatGBP(low)} – ${formatGBP(high)} / month`;
+                document.getElementById("savingsPct").textContent = `Approximately ${Math.round(lowPct)}% – ${Math.round(highPct)}% of current spend`;
+                document.getElementById("confidence").textContent = conf.level;
+                document.getElementById("confidenceNote").textContent = conf.note;
+
+                // Levers
+                const grid = document.getElementById("leversGrid");
+                grid.innerHTML = "";
+                const levers = model.levers.slice(0, 6);
+                for (const lv of levers) {
+                    const card = document.createElement("div");
+                    card.className = "card";
+                    card.innerHTML = `
+            <h3 style="margin-top:0;">${escapeHtml(lv.title)}</h3>
+            <p>${escapeHtml(lv.desc)}</p>
+            <p class="lede" style="margin-top:14px;"><em>Impact: ${escapeHtml(lv.impact)}</em></p>
+          `;
+                    grid.appendChild(card);
+                }
+
+                // Actions
+                const list = document.getElementById("actionsList");
+                list.innerHTML = "";
+                for (const a of model.actions.slice(0, 10)) {
+                    const li = document.createElement("li");
+                    li.textContent = a;
+                    list.appendChild(li);
+                }
+
+                // Store a report model for PDF and copy
+                window.__botInsightsAzure = {
+                    generatedAt: new Date().toISOString(),
+                    inputs: getInputsSnapshot(),
+                    score,
+                    posture,
+                    confidence: conf,
+                    spend,
+                    savings: { low, high, lowPct, highPct },
+                    levers,
+                    actions: model.actions
+                };
+            }
+
+            function escapeHtml(s) {
+                return String(s || "")
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+
+            function getInputsSnapshot() {
+                return {
+                    monthlySpend: fields.monthlySpend(),
+                    region: fields.region(),
+                    envMix: fields.envMix(),
+                    winVms: fields.winVms(),
+                    linVms: fields.linVms(),
+                    runPattern: fields.runPattern(),
+                    cpuAvg: fields.cpuAvg(),
+                    memAvg: fields.memAvg(),
+                    shape: fields.shape(),
+                    nonProdAlwaysOn: fields.nonProdAlwaysOn(),
+                    autoscale: fields.autoscale(),
+                    commitments: fields.commitments(),
+                    diskTier: fields.diskTier(),
+                    diskCap: fields.diskCap(),
+                    backups: fields.backups(),
+                    snapshots: fields.snapshots(),
+                    retention: fields.retention(),
+                    blobTiering: fields.blobTiering(),
+                    tagging: fields.tagging(),
+                    budgets: fields.budgets(),
+                    ahb: fields.ahb()
+                };
+            }
+
+            function scrollToStepper() {
+                const y = stepper.getBoundingClientRect().top + window.scrollY - 90;
+                window.scrollTo({ top: y, behavior: "smooth" });
+            }
+
+            function revealStepper() {
+                stepper.style.display = "";
+                setStep(1);
+                scrollToStepper();
+            }
+
+            // Button wiring
+            startBtn.addEventListener("click", function () {
+                revealStepper();
+            });
+
+            // Next/back wiring
+            document.addEventListener("click", function (e) {
+                const next = e.target && e.target.getAttribute && e.target.getAttribute("data-next");
+                const back = e.target && e.target.getAttribute && e.target.getAttribute("data-back");
+
+                if (next) {
+                    const v = validateStep(current);
+                    if (!v.ok) return alertInline(v.msg);
+                    setStep(Number(next));
+                    scrollToStepper();
+                }
+
+                if (back) {
+                    setStep(Number(back));
+                    scrollToStepper();
+                }
+            });
+
+            // Spend input formatting
+            const spendInput = document.getElementById("monthlySpend");
+            spendInput.addEventListener("blur", function () {
+                const n = toNumberGBP(spendInput.value);
+                if (n && n > 0) spendInput.value = String(Math.round(n));
+            });
+
+            // Generate results
+            generateBtn.addEventListener("click", function () {
+                const v = validateStep(7);
+                if (!v.ok) return alertInline(v.msg);
+
+                // Set progress to 100%
+                progressFill.style.width = "100%";
+
+                // Hide stepper panel (but keep on page)
+                stepper.style.display = "none";
+
+                // Render results
+                wrap.setAttribute("data-step", "0");
+                renderResults();
+                results.classList.add("is-active");
+
+                // Scroll to results
+                const y = results.getBoundingClientRect().top + window.scrollY - 90;
+                window.scrollTo({ top: y, behavior: "smooth" });
+            });
+
+            // Copy actions
+            copyBtn.addEventListener("click", async function () {
+                const model = window.__botInsightsAzure;
+                if (!model) return;
+
+                const text = model.actions.map(a => `- ${a}`).join("\n");
+                try {
+                    await navigator.clipboard.writeText(text);
+                    window.alert("Actions copied to clipboard.");
+                } catch {
+                    window.alert("Could not access clipboard. Please copy manually.");
+                }
+            });
+
+            // Local PDF
+            pdfBtn.addEventListener("click", function () {
+                const model = window.__botInsightsAzure;
+                if (!model) return;
+
+                const jspdf = window.jspdf && window.jspdf.jsPDF ? window.jspdf : null;
+                if (!jspdf) {
+                    window.alert("PDF library did not load. Please try again.");
+                    return;
+                }
+
+                const doc = new jspdf.jsPDF({ unit: "pt", format: "a4" });
+
+                const left = 48;
+                let y = 56;
+
+                function h1(t) { doc.setFont("helvetica", "bold"); doc.setFontSize(16); doc.text(t, left, y); y += 20; }
+                function h2(t) { doc.setFont("helvetica", "bold"); doc.setFontSize(12); doc.text(t, left, y); y += 16; }
+                function p(t) {
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(10);
+                    const lines = doc.splitTextToSize(t, 500);
+                    doc.text(lines, left, y);
+                    y += lines.length * 14;
+                }
+                function spacer(n) { y += n; }
+                function newPageIfNeeded(extra = 0) {
+                    if (y + extra > 760) { doc.addPage(); y = 56; }
+                }
+
+                h1("BOT-Insights | Azure Cost & Optimisation (Beta)");
+                p("Assessment summary (generated locally in your browser).");
+                spacer(8);
+
+                h2("Executive summary");
+                p(`Cost posture: ${model.posture}`);
+                p(`Estimated optimisation range: ${formatGBP(model.savings.low)} – ${formatGBP(model.savings.high)} per month`);
+                p(`Approx: ${Math.round(model.savings.lowPct)}% – ${Math.round(model.savings.highPct)}% of current spend`);
+                p(`Confidence: ${model.confidence.level} (${model.confidence.note})`);
+
+                spacer(10);
+                h2("Key levers");
+                for (const lv of model.levers.slice(0, 6)) {
+                    newPageIfNeeded(60);
+                    p(`• ${lv.title} (Impact: ${lv.impact})`);
+                    p(`  ${lv.desc}`);
+                    spacer(4);
+                }
+
+                newPageIfNeeded(80);
+                spacer(8);
+                h2("Action checklist");
+                for (const a of model.actions.slice(0, 12)) {
+                    newPageIfNeeded(24);
+                    p(`• ${a}`);
+                }
+
+                newPageIfNeeded(60);
+                spacer(10);
+                h2("Notes");
+                p("This is a modelling-based first pass. Precise optimisation requires subscription-level billing and usage analysis.");
+                p("BOT-Solutions offers a fixed-fee detailed Azure Optimisation Review for organisations requiring deeper analysis.");
+
+                const fileName = `BOT-Insights_Azure_Summary_${new Date().toISOString().slice(0, 10)}.pdf`;
+                doc.save(fileName);
+            });
+
+        })();
+    </script>
+
+    <!-- Chatbase Widget -->
+    <script>
+        (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "ALpjA7Pu9YfymHwmVUs6-"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
+    </script>
+
+</body>
+
+</html>
