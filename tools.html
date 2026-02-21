@@ -1,0 +1,210 @@
+<!-- tools.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Tools | BOT-Solutions</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+        content="Applied automation and operational intelligence tools developed under BOT-Solutions. BOT-Insights is a growing suite focused on cost optimisation, platform evaluation and operational efficiency.">
+
+    <link rel="canonical" href="https://bot-solutions.co.uk/tools.html">
+
+    <link rel="stylesheet" href="assets/css/site.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container header-bar">
+
+            <a class="brand" href="index.html">
+                <img src="images/logo.png" alt="BOT-Solutions logo" class="logo-img">
+                <div>
+                    <div class="brand-name">BOT-Solutions</div>
+                    <div class="brand-tag">Business Operations, Technology &amp; Solutions</div>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="services.html">Services</a>
+                <a class="nav-link" href="resources.html">Resources</a>
+                <a class="nav-link is-active" href="tools.html">Tools</a>
+                <a class="nav-link" href="pricing.html">Pricing</a>
+                <a class="nav-link" href="contact.html">Contact</a>
+            </nav>
+
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">
+                🌙 Dark
+            </button>
+
+        </div>
+    </header>
+
+    <main>
+
+        <section class="hero">
+            <div class="container hero-inner">
+
+                <div>
+                    <div class="eyebrow">Applied tooling</div>
+
+                    <h1>Operational intelligence utilities for admins who run real systems.</h1>
+
+                    <p class="lede">
+                        BOT-Insights is a growing suite of structured assessment tools focused on cost optimisation,
+                        platform evaluation, and operational efficiency for support and cloud environments.
+                    </p>
+
+                    <ul class="panel-list">
+                        <li>Practical outputs (not theory)</li>
+                        <li>Designed for support and sysadmin workflows</li>
+                        <li>Clear next actions and repeatable decisions</li>
+                    </ul>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="panel-title">Current focus</div>
+                    <ul class="panel-list">
+                        <li>Azure cost and optimisation first pass</li>
+                        <li>Service desk platform comparisons (coming soon)</li>
+                        <li>Stack rationalisation (coming soon)</li>
+                        <li>Automation opportunity scanning (coming soon)</li>
+                    </ul>
+                    <p class="lede">Built for clarity, not clutter.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>Available Tools</h2>
+
+                <div class="grid">
+
+                    <!-- Clickable card -->
+                    <a class="card-link" href="bot-insights-azure.html"
+                        aria-label="Open: BOT-Insights Azure Cost & Optimisation">
+                        <div class="card">
+                            <h3>BOT-Insights | Azure Cost &amp; Optimisation <span class="lede"
+                                    style="margin-left:6px;"><em>Beta</em></span></h3>
+                            <p>
+                                A structured first-pass Azure cost assessment with optimisation modelling, risk flags,
+                                and a copy/paste action checklist.
+                            </p>
+                            <p class="card-cta">Launch assessment →</p>
+                        </div>
+                    </a>
+
+                    <!-- Coming soon (non-clickable) -->
+                    <div class="card">
+                        <h3>BOT-Insights | Ticketing Platform Intelligence</h3>
+                        <p>
+                            Comparative modelling across leading service desk platforms, designed for support teams and
+                            IT ops.
+                        </p>
+                        <p class="lede" style="margin-top:14px;"><em>Coming soon</em></p>
+                    </div>
+
+                    <div class="card">
+                        <h3>BOT-Insights | SaaS Licence Rationalisation</h3>
+                        <p>
+                            Identify inactive users, tier misalignment, and overlapping subscriptions to reduce ongoing
+                            cost.
+                        </p>
+                        <p class="lede" style="margin-top:14px;"><em>Coming soon</em></p>
+                    </div>
+
+                    <div class="card">
+                        <h3>BOT-Insights | Automation Opportunity Scanner</h3>
+                        <p>
+                            Structured workflow analysis to highlight automation potential, estimated effort, and
+                            operational impact.
+                        </p>
+                        <p class="lede" style="margin-top:14px;"><em>Coming soon</em></p>
+                    </div>
+
+                    <div class="card">
+                        <h3>BOT-Insights | Stack Overlap Analysis</h3>
+                        <p>
+                            Detect redundant tooling and consolidation opportunities across support, monitoring, and
+                            reporting stacks.
+                        </p>
+                        <p class="lede" style="margin-top:14px;"><em>Coming soon</em></p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>© 2026 BOT-Solutions</div>
+            <div>
+                Automation and reporting that works. |
+                <a href="cookies.html">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Theme Toggle Script (same as index) -->
+    <script>
+        (function () {
+            const root = document.documentElement;
+            const toggle = document.getElementById("themeToggle");
+
+            if (!toggle) return;
+
+            const savedTheme = localStorage.getItem("theme");
+
+            if (savedTheme) {
+                if (savedTheme === "light") root.setAttribute("data-theme", "light");
+                else root.removeAttribute("data-theme");
+            } else {
+                const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+                if (!prefersDark) root.setAttribute("data-theme", "light");
+            }
+
+            function updateButton() {
+                const current = root.getAttribute("data-theme");
+                toggle.textContent = current === "light" ? "🌞 Light" : "🌙 Dark";
+            }
+
+            updateButton();
+
+            toggle.addEventListener("click", function () {
+                const current = root.getAttribute("data-theme");
+                const newTheme = current === "light" ? "dark" : "light";
+
+                if (newTheme === "light") {
+                    root.setAttribute("data-theme", "light");
+                    localStorage.setItem("theme", "light");
+                } else {
+                    root.removeAttribute("data-theme");
+                    localStorage.setItem("theme", "dark");
+                }
+
+                updateButton();
+            });
+        })();
+    </script>
+
+    <!-- Chatbase Widget -->
+    <script>
+        (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "ALpjA7Pu9YfymHwmVUs6-"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
+    </script>
+
+</body>
+
+</html>
