@@ -118,8 +118,6 @@
 
 
 
-  /* These glows are fine for accents, but we won't use them for the page background in light mode */
-
   --glow1: rgba(37, 99, 235, 0.10);
 
   --glow2: rgba(37, 99, 235, 0.06);
@@ -180,8 +178,8 @@ html {
 
 }
 
-/* ✅ FIX: Light mode page background should NOT use the dark/glow stack */
-:root[data-theme="light"] html {
+/* ✅ FIX (correct selector): in light mode, remove the glow stack so it doesn’t look grey */
+:root[data-theme="light"] {
 
   background: var(--bg);
 
