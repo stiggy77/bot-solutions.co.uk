@@ -250,53 +250,54 @@
 
     </main>
 
-    <footer class="site-footer">
+    <<footer class="site-footer">
         <div class="container footer-inner">
             <div>© 2026 BOT-Solutions</div>
             <div>
                 Automation and reporting that works. |
-                <a href="cookies.html">Cookies</a>
+                <a href="cookies.html">Cookies</a> |
+                <a href="privacy.html">Privacy</a>
             </div>
         </div>
-    </footer>
+        </footer>
 
 
-    <script>
-        (function () {
-            const root = document.documentElement;
-            const toggle = document.getElementById("themeToggle");
-            if (!toggle) return;
-            const savedTheme = localStorage.getItem("theme");
-            if (savedTheme) {
-                if (savedTheme === "light") root.setAttribute("data-theme", "light");
-                else root.removeAttribute("data-theme");
-            } else {
-                const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-                if (!prefersDark) root.setAttribute("data-theme", "light");
-            }
-            function updateButton() {
-                const current = root.getAttribute("data-theme");
-                toggle.textContent = current === "light" ? "🌞 Light" : "🌙 Dark";
-            }
-            updateButton();
-            toggle.addEventListener("click", function () {
-                const current = root.getAttribute("data-theme");
-                const newTheme = current === "light" ? "dark" : "light";
-                if (newTheme === "light") {
-                    root.setAttribute("data-theme", "light");
-                    localStorage.setItem("theme", "light");
+        <script>
+            (function () {
+                const root = document.documentElement;
+                const toggle = document.getElementById("themeToggle");
+                if (!toggle) return;
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme) {
+                    if (savedTheme === "light") root.setAttribute("data-theme", "light");
+                    else root.removeAttribute("data-theme");
                 } else {
-                    root.removeAttribute("data-theme");
-                    localStorage.setItem("theme", "dark");
+                    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+                    if (!prefersDark) root.setAttribute("data-theme", "light");
+                }
+                function updateButton() {
+                    const current = root.getAttribute("data-theme");
+                    toggle.textContent = current === "light" ? "🌞 Light" : "🌙 Dark";
                 }
                 updateButton();
-            });
-        })();
-    </script>
+                toggle.addEventListener("click", function () {
+                    const current = root.getAttribute("data-theme");
+                    const newTheme = current === "light" ? "dark" : "light";
+                    if (newTheme === "light") {
+                        root.setAttribute("data-theme", "light");
+                        localStorage.setItem("theme", "light");
+                    } else {
+                        root.removeAttribute("data-theme");
+                        localStorage.setItem("theme", "dark");
+                    }
+                    updateButton();
+                });
+            })();
+        </script>
 
-    <script>
-        (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "ALpjA7Pu9YfymHwmVUs6-"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
-    </script>
+        <script>
+            (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "ALpjA7Pu9YfymHwmVUs6-"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
+        </script>
 
 </body>
 
