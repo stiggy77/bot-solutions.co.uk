@@ -1,21 +1,105 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
 
-    <title>BOT-Insights | Ticketing Platform Intelligence | BOT-Solutions</title>
+    <title>Ticketing Platform Intelligence | BOT-Insights | BOT-Solutions</title>
     <link rel="icon" type="image/png" href="favicon.png">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="description"
-        content="BOT-Insights provides ticketing platform intelligence with comparative modelling across leading service desk platforms, designed for support teams and IT ops. Coming soon.">
+        content="BOT-Insights ticketing platform intelligence tool. Capture your current service desk setup, pain points, requirements, and generate a structured comparison brief plus quick-win actions.">
 
-    <link rel="canonical" href="https://bot-solutions.co.uk/bot-insights.html">
+    <link rel="canonical" href="https://bot-solutions.co.uk/ticketing-platform-intelligence.html">
 
     <link rel="stylesheet" href="assets/css/site.css">
+
+    <style>
+        /* Small page-specific helpers only */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 900px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field label {
+            font-weight: 600;
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            padding: 12px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(0, 0, 0, 0.15);
+            color: inherit;
+            outline: none;
+        }
+
+        .field textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .hint {
+            opacity: 0.85;
+            font-size: 0.95rem;
+            margin-top: -2px;
+        }
+
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.12);
+        }
+
+        .pill input {
+            width: 16px;
+            height: 16px;
+        }
+
+        .output {
+            white-space: pre-wrap;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(0, 0, 0, 0.15);
+            padding: 16px;
+            min-height: 220px;
+        }
+
+        .mini-note {
+            opacity: 0.85;
+            font-size: 0.95rem;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -58,95 +142,243 @@
                     <h1>BOT-Insights | Ticketing Platform Intelligence</h1>
 
                     <p class="lede">
-                        Comparative modelling across leading service desk platforms, designed for support teams and IT
-                        ops.
+                        Fill out the assessment and generate a structured comparison brief plus quick-win actions.
+                        This is built for support teams and IT ops who want decisions they can defend.
                     </p>
 
                     <div class="cta-row">
-                        <a class="btn btn-primary" href="contact.html">Register interest →</a>
-                        <a class="btn btn-ghost" href="services.html">View services</a>
+                        <a class="btn btn-primary" href="#assessment">Start assessment →</a>
+                        <a class="btn btn-ghost" href="contact.html">Discuss improvements</a>
                     </div>
 
                     <ul class="panel-list">
-                        <li>Platform comparisons you can actually act on</li>
-                        <li>Support metrics mapped to real operational outcomes</li>
-                        <li>Designed for small to mid-sized support teams</li>
+                        <li>Turn pain points into clear requirements</li>
+                        <li>Generate a vendor comparison brief in minutes</li>
+                        <li>Highlight quick wins even if you do not migrate</li>
                     </ul>
                 </div>
 
                 <div class="hero-panel">
-                    <div class="panel-title">Coming soon</div>
+                    <div class="panel-title">What you get</div>
                     <ul class="panel-list">
-                        <li>Comparative scoring across core capabilities</li>
-                        <li>Benchmark-friendly metrics and reporting views</li>
-                        <li>Migration and improvement insights</li>
-                        <li>Operational blind spots highlighted early</li>
+                        <li>Structured current-state summary</li>
+                        <li>Quick wins checklist</li>
+                        <li>Comparison brief for service desk platforms</li>
+                        <li>Copy/paste report for tickets and notes</li>
                     </ul>
-                    <p class="lede">Less guesswork. Better decisions. Fewer ticketing regrets.</p>
+                    <p class="lede">Less vibe-based tooling. More evidence-based ops.</p>
                 </div>
 
             </div>
         </section>
 
-        <section class="section">
+        <section class="section" id="assessment">
             <div class="container">
 
-                <h2>What BOT-Insights will cover</h2>
+                <h2>Assessment form</h2>
                 <p class="lede">
-                    Ticketing tools tend to be chosen based on habit, brand, or whoever shouted loudest in the meeting.
-                    BOT-Insights is designed to make the choice and the ongoing optimisation more evidence-led.
+                    Keep it simple. Fill what you know, skip what you do not. The report will still generate.
                 </p>
 
                 <div class="grid">
                     <div class="card">
-                        <h3>Platform capability modelling</h3>
-                        <p>Side-by-side comparison across workflows, automation, knowledge, reporting, and integrations.
-                        </p>
+
+                        <h3>1) Context</h3>
+
+                        <div class="form-grid" style="margin-top:14px;">
+                            <div class="field">
+                                <label for="orgName">Organisation or team</label>
+                                <input id="orgName" type="text" placeholder="e.g. IT Support, Platform Ops">
+                            </div>
+
+                            <div class="field">
+                                <label for="teamSize">Support team size</label>
+                                <select id="teamSize">
+                                    <option value="">Select</option>
+                                    <option>1 to 3</option>
+                                    <option>4 to 10</option>
+                                    <option>11 to 25</option>
+                                    <option>26 to 50</option>
+                                    <option>50+</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label for="platform">Current ticketing platform</label>
+                                <input id="platform" type="text"
+                                    placeholder="e.g. Jira Service Management, Freshservice, ServiceNow">
+                            </div>
+
+                            <div class="field">
+                                <label for="ticketVolume">Ticket volume</label>
+                                <select id="ticketVolume">
+                                    <option value="">Select</option>
+                                    <option>&lt; 500 per month</option>
+                                    <option>500 to 2,000 per month</option>
+                                    <option>2,000 to 10,000 per month</option>
+                                    <option>10,000+ per month</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label for="channels">Channels used</label>
+                                <input id="channels" type="text" placeholder="e.g. Email, portal, Teams, phone, API">
+                                <div class="hint">Comma separated is fine.</div>
+                            </div>
+
+                            <div class="field">
+                                <label for="sla">SLA expectations</label>
+                                <input id="sla" type="text" placeholder="e.g. 1h first response P1, 4h P2, 2d P3">
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="card">
-                        <h3>Operational impact mapping</h3>
-                        <p>Translate features into outcomes like faster resolution, fewer handoffs, and lower support
-                            load.</p>
+
+                        <h3>2) Current capability</h3>
+
+                        <div style="margin-top:14px;">
+                            <div class="field">
+                                <label>Features in use</label>
+                                <div class="pill-row">
+                                    <label class="pill"><input type="checkbox" id="fAutomation"> Automation
+                                        rules</label>
+                                    <label class="pill"><input type="checkbox" id="fKb"> Knowledge base</label>
+                                    <label class="pill"><input type="checkbox" id="fSelfService"> Self service
+                                        portal</label>
+                                    <label class="pill"><input type="checkbox" id="fAsset"> Asset or CMDB</label>
+                                    <label class="pill"><input type="checkbox" id="fChange"> Change management</label>
+                                    <label class="pill"><input type="checkbox" id="fOnCall"> On call or paging</label>
+                                    <label class="pill"><input type="checkbox" id="fReporting"> Reporting
+                                        dashboards</label>
+                                    <label class="pill"><input type="checkbox" id="fIntegrations"> Integrations</label>
+                                </div>
+                            </div>
+
+                            <div class="field" style="margin-top:14px;">
+                                <label for="integrations">Key integrations</label>
+                                <input id="integrations" type="text"
+                                    placeholder="e.g. Azure AD, Teams, Slack, monitoring alerts, HR joiners/leavers">
+                            </div>
+
+                            <div class="field" style="margin-top:14px;">
+                                <label for="dataQuality">Data quality and consistency</label>
+                                <select id="dataQuality">
+                                    <option value="">Select</option>
+                                    <option>Good and consistent</option>
+                                    <option>Mixed</option>
+                                    <option>Poor or inconsistent</option>
+                                </select>
+                            </div>
+
+                            <div class="field" style="margin-top:14px;">
+                                <label for="processMaturity">Process maturity</label>
+                                <select id="processMaturity">
+                                    <option value="">Select</option>
+                                    <option>Ad hoc</option>
+                                    <option>Basic and repeatable</option>
+                                    <option>Defined and measured</option>
+                                    <option>Optimised</option>
+                                </select>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="card">
-                        <h3>Support-team friendly outputs</h3>
-                        <p>Clear dashboards and guidance, aimed at IT ops and service desk leads rather than enterprise
-                            theory.</p>
+
+                        <h3>3) Pain points</h3>
+
+                        <div style="margin-top:14px;">
+                            <div class="field">
+                                <label>What hurts most</label>
+                                <div class="pill-row">
+                                    <label class="pill"><input type="checkbox" id="pTriage"> Slow triage and
+                                        routing</label>
+                                    <label class="pill"><input type="checkbox" id="pReporting"> Weak reporting</label>
+                                    <label class="pill"><input type="checkbox" id="pKbFind"> Knowledge is hard to
+                                        find</label>
+                                    <label class="pill"><input type="checkbox" id="pAutomation"> Automation is
+                                        limited</label>
+                                    <label class="pill"><input type="checkbox" id="pUserExperience"> Portal user
+                                        experience</label>
+                                    <label class="pill"><input type="checkbox" id="pCost"> Licensing cost</label>
+                                    <label class="pill"><input type="checkbox" id="pAdmin"> Admin overhead</label>
+                                    <label class="pill"><input type="checkbox" id="pIntegrations"> Integrations are
+                                        messy</label>
+                                </div>
+                            </div>
+
+                            <div class="field" style="margin-top:14px;">
+                                <label for="painNotes">Notes</label>
+                                <textarea id="painNotes"
+                                    placeholder="Anything specific: examples of failure, bottlenecks, repeated incidents, reporting gaps, approvals that drag, etc."></textarea>
+                            </div>
+                        </div>
+
                     </div>
+
+                    <div class="card">
+
+                        <h3>4) Requirements for the next 6 to 18 months</h3>
+
+                        <div class="form-grid" style="margin-top:14px;">
+                            <div class="field">
+                                <label for="mustHave">Must haves</label>
+                                <textarea id="mustHave"
+                                    placeholder="e.g. Strong automation, approval chains, good reporting, portal UX"></textarea>
+                            </div>
+
+                            <div class="field">
+                                <label for="niceHave">Nice to haves</label>
+                                <textarea id="niceHave"
+                                    placeholder="e.g. AI assist, better KB suggestions, built-in paging, lightweight CMDB"></textarea>
+                            </div>
+
+                            <div class="field">
+                                <label for="constraints">Constraints</label>
+                                <textarea id="constraints"
+                                    placeholder="e.g. Must integrate with Azure AD, must support multiple brands, budget limit, compliance"></textarea>
+                            </div>
+
+                            <div class="field">
+                                <label for="migrationAppetite">Migration appetite</label>
+                                <select id="migrationAppetite">
+                                    <option value="">Select</option>
+                                    <option>Prefer to improve current platform</option>
+                                    <option>Open to migration if value is clear</option>
+                                    <option>Actively looking to migrate</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
 
-            </div>
-        </section>
+                <div style="margin-top:22px;" class="cta-row">
+                    <button class="btn btn-primary" id="btnGenerate" type="button">Generate report →</button>
+                    <button class="btn btn-ghost" id="btnCopy" type="button">Copy report</button>
+                    <button class="btn btn-ghost" id="btnReset" type="button">Reset</button>
+                </div>
 
-        <section class="section">
-            <div class="container">
-
-                <h2>Who it is for</h2>
-                <p class="lede">
-                    If you run a service desk, own incident and change flow, or support a business-critical platform,
-                    this is built for you.
+                <p class="mini-note">
+                    Nothing is sent anywhere. It is generated in your browser.
                 </p>
 
-                <div class="grid">
-                    <div class="card">
-                        <h3>Support leads</h3>
-                        <p>Understand what your platform is good at, what it is not, and where to focus improvements.
-                        </p>
-                    </div>
+            </div>
+        </section>
 
-                    <div class="card">
-                        <h3>IT ops and platform owners</h3>
-                        <p>Compare tools and configurations using consistent modelling rather than opinion.</p>
-                    </div>
+        <section class="section">
+            <div class="container">
 
-                    <div class="card">
-                        <h3>Teams planning change</h3>
-                        <p>Migrations, consolidations, or fixing an overcomplicated setup that never quite worked as
-                            promised.</p>
-                    </div>
-                </div>
+                <h2>Generated report</h2>
+                <p class="lede">
+                    Copy this into a ticket, Notion, Confluence, or a vendor comparison email.
+                </p>
+
+                <div class="output" id="output" aria-live="polite"></div>
 
             </div>
         </section>
@@ -154,14 +386,14 @@
         <section class="section">
             <div class="container">
 
-                <h2>Want a heads-up when it launches?</h2>
+                <h2>Need help turning this into action?</h2>
                 <p class="lede">
-                    Drop a message and we will let you know when BOT-Insights is live, plus what platforms and
-                    comparison areas are included first.
+                    If you want, we can translate your outputs into a short improvement plan, quick wins first, then
+                    deeper work if it earns its keep.
                 </p>
 
                 <div style="margin-top:25px;">
-                    <a class="btn btn-primary" href="contact.html">Register interest →</a>
+                    <a class="btn btn-primary" href="contact.html">Contact BOT-Solutions →</a>
                 </div>
 
             </div>
@@ -213,9 +445,211 @@
                     root.removeAttribute("data-theme");
                     localStorage.setItem("theme", "dark");
                 }
-
                 updateButton();
             });
+        })();
+    </script>
+
+    <script>
+        (function () {
+            const el = (id) => document.getElementById(id);
+
+            function yn(v) { return v ? "Yes" : "No"; }
+
+            function getChecked(ids) {
+                return ids.filter(id => el(id)?.checked).map(id => {
+                    const label = el(id)?.closest("label");
+                    return label ? label.textContent.trim() : id;
+                });
+            }
+
+            function line(label, value) {
+                if (!value) return "";
+                return `${label}: ${value}\n`;
+            }
+
+            function bullet(items) {
+                if (!items || items.length === 0) return "• None noted\n";
+                return items.map(i => `• ${i}`).join("\n") + "\n";
+            }
+
+            function buildQuickWins(pains, features, maturity, dataQuality) {
+                const wins = [];
+
+                if (pains.includes("Slow triage and routing") || pains.includes("Triage")) {
+                    wins.push("Triage: enforce mandatory fields for request type, service, impact, urgency. Add simple routing rules and default assignees.");
+                }
+
+                if (pains.includes("Weak reporting") || !features.includes("Reporting dashboards")) {
+                    wins.push("Reporting: define 5 core metrics (first response, resolution, reopen rate, backlog age, SLA breach rate). Build one weekly dashboard and stick to it.");
+                }
+
+                if (pains.includes("Knowledge is hard to find") || !features.includes("Knowledge base")) {
+                    wins.push("Knowledge: start with top 20 recurring issues. Create short articles and link them to ticket categories. Make KB creation part of closure for repeats.");
+                }
+
+                if (pains.includes("Automation is limited") || !features.includes("Automation rules")) {
+                    wins.push("Automation: start with three rules only (auto categorise, auto assign, auto request approvals). Add more only when you can measure impact.");
+                }
+
+                if (pains.includes("Integrations are messy") || features.includes("Integrations")) {
+                    wins.push("Integrations: list every integration, owner, purpose, and failure mode. Remove duplicates. Standardise alert to ticket format.");
+                }
+
+                if (dataQuality === "Poor or inconsistent") {
+                    wins.push("Data quality: reduce free text. Use dropdowns for service, category, priority. Clean up old categories and close unused queues.");
+                }
+
+                if (maturity === "Ad hoc") {
+                    wins.push("Process: define a minimal incident flow and a minimal request flow. Make them visible and train to them. Avoid building change management first.");
+                }
+
+                if (wins.length === 0) {
+                    wins.push("Baseline: standardise categories, add a simple weekly review, and focus on one measurable improvement per month.");
+                }
+
+                return wins;
+            }
+
+            function generateReport() {
+                const orgName = el("orgName").value.trim();
+                const teamSize = el("teamSize").value;
+                const platform = el("platform").value.trim();
+                const ticketVolume = el("ticketVolume").value;
+                const channels = el("channels").value.trim();
+                const sla = el("sla").value.trim();
+
+                const integrations = el("integrations").value.trim();
+                const dataQuality = el("dataQuality").value;
+                const maturity = el("processMaturity").value;
+
+                const featureIds = ["fAutomation", "fKb", "fSelfService", "fAsset", "fChange", "fOnCall", "fReporting", "fIntegrations"];
+                const featureLabels = {
+                    fAutomation: "Automation rules",
+                    fKb: "Knowledge base",
+                    fSelfService: "Self service portal",
+                    fAsset: "Asset or CMDB",
+                    fChange: "Change management",
+                    fOnCall: "On call or paging",
+                    fReporting: "Reporting dashboards",
+                    fIntegrations: "Integrations"
+                };
+                const features = featureIds.filter(id => el(id).checked).map(id => featureLabels[id]);
+
+                const painIds = ["pTriage", "pReporting", "pKbFind", "pAutomation", "pUserExperience", "pCost", "pAdmin", "pIntegrations"];
+                const painLabels = {
+                    pTriage: "Slow triage and routing",
+                    pReporting: "Weak reporting",
+                    pKbFind: "Knowledge is hard to find",
+                    pAutomation: "Automation is limited",
+                    pUserExperience: "Portal user experience",
+                    pCost: "Licensing cost",
+                    pAdmin: "Admin overhead",
+                    pIntegrations: "Integrations are messy"
+                };
+                const pains = painIds.filter(id => el(id).checked).map(id => painLabels[id]);
+
+                const painNotes = el("painNotes").value.trim();
+
+                const mustHave = el("mustHave").value.trim();
+                const niceHave = el("niceHave").value.trim();
+                const constraints = el("constraints").value.trim();
+                const migrationAppetite = el("migrationAppetite").value;
+
+                const quickWins = buildQuickWins(pains, features, maturity, dataQuality);
+
+                const today = new Date();
+                const dateStamp = today.toISOString().slice(0, 10);
+
+                let out = "";
+                out += `BOT-Insights | Ticketing Platform Intelligence\n`;
+                out += `Generated: ${dateStamp}\n`;
+                out += `\n`;
+
+                out += `1) Current state\n`;
+                out += line("Team", orgName || "Not provided");
+                out += line("Support team size", teamSize || "Not provided");
+                out += line("Current platform", platform || "Not provided");
+                out += line("Ticket volume", ticketVolume || "Not provided");
+                out += line("Channels", channels || "Not provided");
+                out += line("SLA expectations", sla || "Not provided");
+                out += line("Key integrations", integrations || "Not provided");
+                out += line("Data quality", dataQuality || "Not provided");
+                out += line("Process maturity", maturity || "Not provided");
+                out += `Features in use:\n${bullet(features)}\n`;
+
+                out += `2) Pain points\n`;
+                out += `${bullet(pains)}\n`;
+                if (painNotes) {
+                    out += `Notes:\n${painNotes}\n\n`;
+                }
+
+                out += `3) Requirements (next 6 to 18 months)\n`;
+                out += `Must haves:\n${mustHave ? mustHave : "Not provided"}\n\n`;
+                out += `Nice to haves:\n${niceHave ? niceHave : "Not provided"}\n\n`;
+                out += `Constraints:\n${constraints ? constraints : "Not provided"}\n\n`;
+                out += line("Migration appetite", migrationAppetite || "Not provided");
+                out += `\n`;
+
+                out += `4) Quick win actions (even if you stay on the same platform)\n`;
+                out += quickWins.map(w => `• ${w}`).join("\n") + "\n\n";
+
+                out += `5) Comparison brief (use this for vendor evaluation)\n`;
+                out += `Goal: Select or improve a service desk platform that reduces admin overhead, improves triage, and strengthens reporting.\n\n`;
+                out += `Evaluation areas:\n`;
+                out += `• Ticket intake and routing: categories, automation, approvals, SLAs\n`;
+                out += `• Reporting: real-time dashboards, SLA breach tracking, backlog ageing, trend analysis\n`;
+                out += `• Knowledge: creation workflow, search quality, linking to tickets, article effectiveness\n`;
+                out += `• Integrations: identity, chat, monitoring alerts, HR, asset data, APIs\n`;
+                out += `• Administration: configuration complexity, change safety, permissions model\n`;
+                out += `• Commercials: licensing model, add-on costs, support tiers\n\n`;
+
+                out += `Suggested next steps:\n`;
+                out += `• Confirm the top 3 pain points and tie each to a measurable target.\n`;
+                out += `• Run a two-week baseline using the 5 core metrics.\n`;
+                out += `• Trial improvements in current platform first where possible.\n`;
+                out += `• If migrating, build a short proof-of-value focusing on triage, reporting, and integrations.\n`;
+
+                el("output").textContent = out;
+            }
+
+            function copyReport() {
+                const text = el("output").textContent.trim();
+                if (!text) return;
+
+                navigator.clipboard.writeText(text).then(() => {
+                    const btn = el("btnCopy");
+                    const old = btn.textContent;
+                    btn.textContent = "Copied";
+                    setTimeout(() => btn.textContent = old, 1200);
+                });
+            }
+
+            function resetForm() {
+                const ids = [
+                    "orgName", "teamSize", "platform", "ticketVolume", "channels", "sla",
+                    "integrations", "dataQuality", "processMaturity", "painNotes",
+                    "mustHave", "niceHave", "constraints", "migrationAppetite"
+                ];
+                ids.forEach(id => {
+                    const e = el(id);
+                    if (!e) return;
+                    if (e.tagName === "SELECT") e.value = "";
+                    else e.value = "";
+                });
+
+                const checks = [
+                    "fAutomation", "fKb", "fSelfService", "fAsset", "fChange", "fOnCall", "fReporting", "fIntegrations",
+                    "pTriage", "pReporting", "pKbFind", "pAutomation", "pUserExperience", "pCost", "pAdmin", "pIntegrations"
+                ];
+                checks.forEach(id => { if (el(id)) el(id).checked = false; });
+
+                el("output").textContent = "";
+            }
+
+            el("btnGenerate").addEventListener("click", generateReport);
+            el("btnCopy").addEventListener("click", copyReport);
+            el("btnReset").addEventListener("click", resetForm);
         })();
     </script>
 
