@@ -10,18 +10,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="description"
-        content="BOT-Insights ticketing platform intelligence tool. Capture your current service desk setup, pain points, requirements, and generate a structured comparison brief plus quick-win actions.">
+        content="BOT-Insights ticketing platform intelligence tool. Step-by-step assessment to generate a structured comparison brief plus quick-win actions for support teams and IT ops.">
 
     <link rel="canonical" href="https://bot-solutions.co.uk/ticketing-platform-intelligence.html">
 
     <link rel="stylesheet" href="assets/css/site.css">
 
     <style>
-        /* Small page-specific helpers only */
+        .wizard {
+            display: grid;
+            gap: 18px;
+        }
+
+        .stepper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            opacity: 0.95;
+        }
+
+        .step-dot {
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(0, 0, 0, 0.14);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .step-dot.is-active {
+            border-color: rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .step-dot.is-done {
+            opacity: 0.8;
+        }
+
+        .step-label {
+            opacity: 0.85;
+            font-size: 0.95rem;
+        }
+
+        .step-panel {
+            display: none;
+        }
+
+        .step-panel.is-active {
+            display: block;
+        }
+
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
+            margin-top: 14px;
         }
 
         @media (max-width: 900px) {
@@ -85,13 +133,43 @@
             height: 16px;
         }
 
+        .wizard-nav {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        .wizard-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+
+        .progress>div {
+            height: 100%;
+            width: 0%;
+            background: rgba(255, 255, 255, 0.22);
+        }
+
         .output {
             white-space: pre-wrap;
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.12);
             background: rgba(0, 0, 0, 0.15);
             padding: 16px;
-            min-height: 220px;
+            min-height: 240px;
         }
 
         .mini-note {
@@ -142,18 +220,18 @@
                     <h1>BOT-Insights | Ticketing Platform Intelligence</h1>
 
                     <p class="lede">
-                        Fill out the assessment and generate a structured comparison brief plus quick-win actions.
-                        This is built for support teams and IT ops who want decisions they can defend.
+                        Step-by-step assessment to generate a structured comparison brief plus quick-win actions.
+                        Nothing is sent anywhere. It is generated in your browser.
                     </p>
 
                     <div class="cta-row">
-                        <a class="btn btn-primary" href="#assessment">Start assessment →</a>
+                        <a class="btn btn-primary" href="#wizard">Start assessment →</a>
                         <a class="btn btn-ghost" href="contact.html">Discuss improvements</a>
                     </div>
 
                     <ul class="panel-list">
-                        <li>Turn pain points into clear requirements</li>
-                        <li>Generate a vendor comparison brief in minutes</li>
+                        <li>Answer a few questions per step</li>
+                        <li>Generate a vendor comparison brief</li>
                         <li>Highlight quick wins even if you do not migrate</li>
                     </ul>
                 </div>
@@ -161,31 +239,46 @@
                 <div class="hero-panel">
                     <div class="panel-title">What you get</div>
                     <ul class="panel-list">
-                        <li>Structured current-state summary</li>
+                        <li>Current-state summary</li>
                         <li>Quick wins checklist</li>
-                        <li>Comparison brief for service desk platforms</li>
-                        <li>Copy/paste report for tickets and notes</li>
+                        <li>Comparison brief for platforms</li>
+                        <li>Copy/paste report</li>
                     </ul>
-                    <p class="lede">Less vibe-based tooling. More evidence-based ops.</p>
+                    <p class="lede">Built for clarity, not clutter.</p>
                 </div>
 
             </div>
         </section>
 
-        <section class="section" id="assessment">
+        <section class="section" id="wizard">
             <div class="container">
 
-                <h2>Assessment form</h2>
+                <h2>Assessment</h2>
                 <p class="lede">
-                    Keep it simple. Fill what you know, skip what you do not. The report will still generate.
+                    Seven short steps. You can skip anything you do not know.
                 </p>
 
-                <div class="grid">
-                    <div class="card">
+                <div class="card wizard">
 
-                        <h3>1) Context</h3>
+                    <div class="wizard-meta">
+                        <div>
+                            <div class="stepper" id="stepper"></div>
+                            <div class="step-label" id="stepLabel" style="margin-top:10px;"></div>
+                        </div>
 
-                        <div class="form-grid" style="margin-top:14px;">
+                        <div style="min-width:220px; flex: 1;">
+                            <div class="progress" aria-label="Progress">
+                                <div id="progressBar"></div>
+                            </div>
+                            <div class="step-label" id="progressText" style="margin-top:8px; text-align:right;"></div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 1 -->
+                    <div class="step-panel is-active" data-step="0">
+                        <h3>Step 1 of 7: Basics</h3>
+
+                        <div class="form-grid">
                             <div class="field">
                                 <label for="orgName">Organisation or team</label>
                                 <input id="orgName" type="text" placeholder="e.g. IT Support, Platform Ops">
@@ -219,7 +312,14 @@
                                     <option>10,000+ per month</option>
                                 </select>
                             </div>
+                        </div>
+                    </div>
 
+                    <!-- STEP 2 -->
+                    <div class="step-panel" data-step="1">
+                        <h3>Step 2 of 7: Intake and expectations</h3>
+
+                        <div class="form-grid">
                             <div class="field">
                                 <label for="channels">Channels used</label>
                                 <input id="channels" type="text" placeholder="e.g. Email, portal, Teams, phone, API">
@@ -230,39 +330,70 @@
                                 <label for="sla">SLA expectations</label>
                                 <input id="sla" type="text" placeholder="e.g. 1h first response P1, 4h P2, 2d P3">
                             </div>
-                        </div>
 
-                    </div>
-
-                    <div class="card">
-
-                        <h3>2) Current capability</h3>
-
-                        <div style="margin-top:14px;">
                             <div class="field">
-                                <label>Features in use</label>
-                                <div class="pill-row">
-                                    <label class="pill"><input type="checkbox" id="fAutomation"> Automation
-                                        rules</label>
-                                    <label class="pill"><input type="checkbox" id="fKb"> Knowledge base</label>
-                                    <label class="pill"><input type="checkbox" id="fSelfService"> Self service
-                                        portal</label>
-                                    <label class="pill"><input type="checkbox" id="fAsset"> Asset or CMDB</label>
-                                    <label class="pill"><input type="checkbox" id="fChange"> Change management</label>
-                                    <label class="pill"><input type="checkbox" id="fOnCall"> On call or paging</label>
-                                    <label class="pill"><input type="checkbox" id="fReporting"> Reporting
-                                        dashboards</label>
-                                    <label class="pill"><input type="checkbox" id="fIntegrations"> Integrations</label>
-                                </div>
+                                <label for="priorityModel">Priority model</label>
+                                <select id="priorityModel">
+                                    <option value="">Select</option>
+                                    <option>Simple (P1 to P3)</option>
+                                    <option>Standard (P1 to P5)</option>
+                                    <option>Impact x Urgency matrix</option>
+                                    <option>Not formalised</option>
+                                </select>
                             </div>
 
-                            <div class="field" style="margin-top:14px;">
+                            <div class="field">
+                                <label for="approvals">Approvals needed</label>
+                                <input id="approvals" type="text"
+                                    placeholder="e.g. Access requests, purchase approvals, change approvals">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3 -->
+                    <div class="step-panel" data-step="2">
+                        <h3>Step 3 of 7: Features in use</h3>
+
+                        <div class="field">
+                            <label>Tick what is genuinely in use (not just available)</label>
+                            <div class="pill-row">
+                                <label class="pill"><input type="checkbox" id="fAutomation"> Automation rules</label>
+                                <label class="pill"><input type="checkbox" id="fKb"> Knowledge base</label>
+                                <label class="pill"><input type="checkbox" id="fSelfService"> Self service
+                                    portal</label>
+                                <label class="pill"><input type="checkbox" id="fAsset"> Asset or CMDB</label>
+                                <label class="pill"><input type="checkbox" id="fChange"> Change management</label>
+                                <label class="pill"><input type="checkbox" id="fOnCall"> On call or paging</label>
+                                <label class="pill"><input type="checkbox" id="fReporting"> Reporting dashboards</label>
+                                <label class="pill"><input type="checkbox" id="fIntegrations"> Integrations</label>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="field">
                                 <label for="integrations">Key integrations</label>
                                 <input id="integrations" type="text"
                                     placeholder="e.g. Azure AD, Teams, Slack, monitoring alerts, HR joiners/leavers">
                             </div>
 
-                            <div class="field" style="margin-top:14px;">
+                            <div class="field">
+                                <label for="adminEffort">Admin effort level</label>
+                                <select id="adminEffort">
+                                    <option value="">Select</option>
+                                    <option>Low</option>
+                                    <option>Medium</option>
+                                    <option>High</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 4 -->
+                    <div class="step-panel" data-step="3">
+                        <h3>Step 4 of 7: Data and process maturity</h3>
+
+                        <div class="form-grid">
+                            <div class="field">
                                 <label for="dataQuality">Data quality and consistency</label>
                                 <select id="dataQuality">
                                     <option value="">Select</option>
@@ -272,7 +403,7 @@
                                 </select>
                             </div>
 
-                            <div class="field" style="margin-top:14px;">
+                            <div class="field">
                                 <label for="processMaturity">Process maturity</label>
                                 <select id="processMaturity">
                                     <option value="">Select</option>
@@ -282,52 +413,68 @@
                                     <option>Optimised</option>
                                 </select>
                             </div>
-                        </div>
 
-                    </div>
-
-                    <div class="card">
-
-                        <h3>3) Pain points</h3>
-
-                        <div style="margin-top:14px;">
                             <div class="field">
-                                <label>What hurts most</label>
-                                <div class="pill-row">
-                                    <label class="pill"><input type="checkbox" id="pTriage"> Slow triage and
-                                        routing</label>
-                                    <label class="pill"><input type="checkbox" id="pReporting"> Weak reporting</label>
-                                    <label class="pill"><input type="checkbox" id="pKbFind"> Knowledge is hard to
-                                        find</label>
-                                    <label class="pill"><input type="checkbox" id="pAutomation"> Automation is
-                                        limited</label>
-                                    <label class="pill"><input type="checkbox" id="pUserExperience"> Portal user
-                                        experience</label>
-                                    <label class="pill"><input type="checkbox" id="pCost"> Licensing cost</label>
-                                    <label class="pill"><input type="checkbox" id="pAdmin"> Admin overhead</label>
-                                    <label class="pill"><input type="checkbox" id="pIntegrations"> Integrations are
-                                        messy</label>
-                                </div>
+                                <label for="queues">Queue structure</label>
+                                <select id="queues">
+                                    <option value="">Select</option>
+                                    <option>One main queue</option>
+                                    <option>Few queues by team</option>
+                                    <option>Many queues and complex routing</option>
+                                </select>
                             </div>
 
-                            <div class="field" style="margin-top:14px;">
-                                <label for="painNotes">Notes</label>
-                                <textarea id="painNotes"
-                                    placeholder="Anything specific: examples of failure, bottlenecks, repeated incidents, reporting gaps, approvals that drag, etc."></textarea>
+                            <div class="field">
+                                <label for="kbCoverage">Knowledge coverage</label>
+                                <select id="kbCoverage">
+                                    <option value="">Select</option>
+                                    <option>Strong</option>
+                                    <option>Some</option>
+                                    <option>Minimal</option>
+                                    <option>None</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 5 -->
+                    <div class="step-panel" data-step="4">
+                        <h3>Step 5 of 7: Pain points</h3>
+
+                        <div class="field">
+                            <label>What hurts most</label>
+                            <div class="pill-row">
+                                <label class="pill"><input type="checkbox" id="pTriage"> Slow triage and routing</label>
+                                <label class="pill"><input type="checkbox" id="pReporting"> Weak reporting</label>
+                                <label class="pill"><input type="checkbox" id="pKbFind"> Knowledge is hard to
+                                    find</label>
+                                <label class="pill"><input type="checkbox" id="pAutomation"> Automation is
+                                    limited</label>
+                                <label class="pill"><input type="checkbox" id="pUserExperience"> Portal user
+                                    experience</label>
+                                <label class="pill"><input type="checkbox" id="pCost"> Licensing cost</label>
+                                <label class="pill"><input type="checkbox" id="pAdmin"> Admin overhead</label>
+                                <label class="pill"><input type="checkbox" id="pIntegrations"> Integrations are
+                                    messy</label>
                             </div>
                         </div>
 
+                        <div class="field" style="margin-top:14px;">
+                            <label for="painNotes">Notes</label>
+                            <textarea id="painNotes"
+                                placeholder="Examples of pain: repeated incidents, approvals that drag, reporting gaps, manual work, triage issues, etc."></textarea>
+                        </div>
                     </div>
 
-                    <div class="card">
+                    <!-- STEP 6 -->
+                    <div class="step-panel" data-step="5">
+                        <h3>Step 6 of 7: Requirements</h3>
 
-                        <h3>4) Requirements for the next 6 to 18 months</h3>
-
-                        <div class="form-grid" style="margin-top:14px;">
+                        <div class="form-grid">
                             <div class="field">
                                 <label for="mustHave">Must haves</label>
                                 <textarea id="mustHave"
-                                    placeholder="e.g. Strong automation, approval chains, good reporting, portal UX"></textarea>
+                                    placeholder="e.g. Strong automation, approval chains, solid reporting, good portal UX"></textarea>
                             </div>
 
                             <div class="field">
@@ -352,33 +499,38 @@
                                 </select>
                             </div>
                         </div>
+                    </div>
 
+                    <!-- STEP 7 -->
+                    <div class="step-panel" data-step="6">
+                        <h3>Step 7 of 7: Generate report</h3>
+
+                        <p class="lede">
+                            Click generate to produce a copy/paste brief with quick wins and a platform evaluation
+                            outline.
+                        </p>
+
+                        <div class="wizard-nav">
+                            <button class="btn btn-primary" id="btnGenerate" type="button">Generate report →</button>
+                            <button class="btn btn-ghost" id="btnCopy" type="button">Copy report</button>
+                            <button class="btn btn-ghost" id="btnReset" type="button">Reset</button>
+                        </div>
+
+                        <p class="mini-note">
+                            Nothing is sent anywhere. It is generated in your browser.
+                        </p>
+
+                        <div style="margin-top:18px;">
+                            <div class="output" id="output" aria-live="polite"></div>
+                        </div>
+                    </div>
+
+                    <div class="wizard-nav">
+                        <button class="btn btn-ghost" id="btnBack" type="button">← Back</button>
+                        <button class="btn btn-primary" id="btnNext" type="button">Next →</button>
                     </div>
 
                 </div>
-
-                <div style="margin-top:22px;" class="cta-row">
-                    <button class="btn btn-primary" id="btnGenerate" type="button">Generate report →</button>
-                    <button class="btn btn-ghost" id="btnCopy" type="button">Copy report</button>
-                    <button class="btn btn-ghost" id="btnReset" type="button">Reset</button>
-                </div>
-
-                <p class="mini-note">
-                    Nothing is sent anywhere. It is generated in your browser.
-                </p>
-
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="container">
-
-                <h2>Generated report</h2>
-                <p class="lede">
-                    Copy this into a ticket, Notion, Confluence, or a vendor comparison email.
-                </p>
-
-                <div class="output" id="output" aria-live="polite"></div>
 
             </div>
         </section>
@@ -452,20 +604,47 @@
 
     <script>
         (function () {
-            const el = (id) => document.getElementById(id);
+            const $ = (id) => document.getElementById(id);
+            const panels = Array.from(document.querySelectorAll(".step-panel"));
+            const totalSteps = panels.length;
 
-            function yn(v) { return v ? "Yes" : "No"; }
+            const stepNames = [
+                "Basics",
+                "Intake and expectations",
+                "Features in use",
+                "Data and process maturity",
+                "Pain points",
+                "Requirements",
+                "Generate report"
+            ];
 
-            function getChecked(ids) {
-                return ids.filter(id => el(id)?.checked).map(id => {
-                    const label = el(id)?.closest("label");
-                    return label ? label.textContent.trim() : id;
-                });
+            let step = 0;
+
+            function setStep(newStep) {
+                step = Math.max(0, Math.min(totalSteps - 1, newStep));
+
+                panels.forEach((p, i) => p.classList.toggle("is-active", i === step));
+
+                const stepper = $("stepper");
+                stepper.innerHTML = "";
+                for (let i = 0; i < totalSteps; i++) {
+                    const d = document.createElement("div");
+                    d.className = "step-dot" + (i === step ? " is-active" : "") + (i < step ? " is-done" : "");
+                    d.textContent = (i + 1);
+                    stepper.appendChild(d);
+                }
+
+                $("stepLabel").textContent = `Step ${step + 1} of ${totalSteps}: ${stepNames[step]}`;
+                const pct = Math.round(((step + 1) / totalSteps) * 100);
+                $("progressBar").style.width = pct + "%";
+                $("progressText").textContent = `${pct}% complete`;
+
+                $("btnBack").disabled = step === 0;
+                $("btnNext").style.display = step === totalSteps - 1 ? "none" : "inline-flex";
             }
 
             function line(label, value) {
-                if (!value) return "";
-                return `${label}: ${value}\n`;
+                return `${label}: ${value ? value : "Not provided"}\n`;
             }
 
             function bullet(items) {
@@ -476,7 +655,7 @@
             function buildQuickWins(pains, features, maturity, dataQuality) {
                 const wins = [];
 
-                if (pains.includes("Slow triage and routing") || pains.includes("Triage")) {
+                if (pains.includes("Slow triage and routing")) {
                     wins.push("Triage: enforce mandatory fields for request type, service, impact, urgency. Add simple routing rules and default assignees.");
                 }
 
@@ -512,18 +691,24 @@
             }
 
             function generateReport() {
-                const orgName = el("orgName").value.trim();
-                const teamSize = el("teamSize").value;
-                const platform = el("platform").value.trim();
-                const ticketVolume = el("ticketVolume").value;
-                const channels = el("channels").value.trim();
-                const sla = el("sla").value.trim();
+                const orgName = $("orgName").value.trim();
+                const teamSize = $("teamSize").value;
+                const platform = $("platform").value.trim();
+                const ticketVolume = $("ticketVolume").value;
 
-                const integrations = el("integrations").value.trim();
-                const dataQuality = el("dataQuality").value;
-                const maturity = el("processMaturity").value;
+                const channels = $("channels").value.trim();
+                const sla = $("sla").value.trim();
+                const priorityModel = $("priorityModel").value;
+                const approvals = $("approvals").value.trim();
 
-                const featureIds = ["fAutomation", "fKb", "fSelfService", "fAsset", "fChange", "fOnCall", "fReporting", "fIntegrations"];
+                const integrations = $("integrations").value.trim();
+                const adminEffort = $("adminEffort").value;
+
+                const dataQuality = $("dataQuality").value;
+                const maturity = $("processMaturity").value;
+                const queues = $("queues").value;
+                const kbCoverage = $("kbCoverage").value;
+
                 const featureLabels = {
                     fAutomation: "Automation rules",
                     fKb: "Knowledge base",
@@ -534,9 +719,9 @@
                     fReporting: "Reporting dashboards",
                     fIntegrations: "Integrations"
                 };
-                const features = featureIds.filter(id => el(id).checked).map(id => featureLabels[id]);
+                const featureIds = Object.keys(featureLabels);
+                const features = featureIds.filter(id => $(id).checked).map(id => featureLabels[id]);
 
-                const painIds = ["pTriage", "pReporting", "pKbFind", "pAutomation", "pUserExperience", "pCost", "pAdmin", "pIntegrations"];
                 const painLabels = {
                     pTriage: "Slow triage and routing",
                     pReporting: "Weak reporting",
@@ -547,48 +732,50 @@
                     pAdmin: "Admin overhead",
                     pIntegrations: "Integrations are messy"
                 };
-                const pains = painIds.filter(id => el(id).checked).map(id => painLabels[id]);
+                const painIds = Object.keys(painLabels);
+                const pains = painIds.filter(id => $(id).checked).map(id => painLabels[id]);
 
-                const painNotes = el("painNotes").value.trim();
+                const painNotes = $("painNotes").value.trim();
 
-                const mustHave = el("mustHave").value.trim();
-                const niceHave = el("niceHave").value.trim();
-                const constraints = el("constraints").value.trim();
-                const migrationAppetite = el("migrationAppetite").value;
+                const mustHave = $("mustHave").value.trim();
+                const niceHave = $("niceHave").value.trim();
+                const constraints = $("constraints").value.trim();
+                const migrationAppetite = $("migrationAppetite").value;
 
                 const quickWins = buildQuickWins(pains, features, maturity, dataQuality);
 
-                const today = new Date();
-                const dateStamp = today.toISOString().slice(0, 10);
+                const dateStamp = new Date().toISOString().slice(0, 10);
 
                 let out = "";
                 out += `BOT-Insights | Ticketing Platform Intelligence\n`;
-                out += `Generated: ${dateStamp}\n`;
-                out += `\n`;
+                out += `Generated: ${dateStamp}\n\n`;
 
                 out += `1) Current state\n`;
-                out += line("Team", orgName || "Not provided");
-                out += line("Support team size", teamSize || "Not provided");
-                out += line("Current platform", platform || "Not provided");
-                out += line("Ticket volume", ticketVolume || "Not provided");
-                out += line("Channels", channels || "Not provided");
-                out += line("SLA expectations", sla || "Not provided");
-                out += line("Key integrations", integrations || "Not provided");
-                out += line("Data quality", dataQuality || "Not provided");
-                out += line("Process maturity", maturity || "Not provided");
+                out += line("Team", orgName);
+                out += line("Support team size", teamSize);
+                out += line("Current platform", platform);
+                out += line("Ticket volume", ticketVolume);
+                out += line("Channels", channels);
+                out += line("SLA expectations", sla);
+                out += line("Priority model", priorityModel);
+                out += line("Approvals needed", approvals);
+                out += line("Key integrations", integrations);
+                out += line("Admin effort", adminEffort);
+                out += line("Data quality", dataQuality);
+                out += line("Process maturity", maturity);
+                out += line("Queue structure", queues);
+                out += line("Knowledge coverage", kbCoverage);
                 out += `Features in use:\n${bullet(features)}\n`;
 
                 out += `2) Pain points\n`;
                 out += `${bullet(pains)}\n`;
-                if (painNotes) {
-                    out += `Notes:\n${painNotes}\n\n`;
-                }
+                if (painNotes) out += `Notes:\n${painNotes}\n\n`;
 
                 out += `3) Requirements (next 6 to 18 months)\n`;
                 out += `Must haves:\n${mustHave ? mustHave : "Not provided"}\n\n`;
                 out += `Nice to haves:\n${niceHave ? niceHave : "Not provided"}\n\n`;
                 out += `Constraints:\n${constraints ? constraints : "Not provided"}\n\n`;
-                out += line("Migration appetite", migrationAppetite || "Not provided");
+                out += line("Migration appetite", migrationAppetite);
                 out += `\n`;
 
                 out += `4) Quick win actions (even if you stay on the same platform)\n`;
@@ -598,27 +785,27 @@
                 out += `Goal: Select or improve a service desk platform that reduces admin overhead, improves triage, and strengthens reporting.\n\n`;
                 out += `Evaluation areas:\n`;
                 out += `• Ticket intake and routing: categories, automation, approvals, SLAs\n`;
-                out += `• Reporting: real-time dashboards, SLA breach tracking, backlog ageing, trend analysis\n`;
-                out += `• Knowledge: creation workflow, search quality, linking to tickets, article effectiveness\n`;
+                out += `• Reporting: dashboards, SLA breach tracking, backlog ageing, trends\n`;
+                out += `• Knowledge: creation workflow, search quality, linking to tickets, effectiveness\n`;
                 out += `• Integrations: identity, chat, monitoring alerts, HR, asset data, APIs\n`;
-                out += `• Administration: configuration complexity, change safety, permissions model\n`;
+                out += `• Administration: configuration complexity, permissions model, change safety\n`;
                 out += `• Commercials: licensing model, add-on costs, support tiers\n\n`;
 
                 out += `Suggested next steps:\n`;
                 out += `• Confirm the top 3 pain points and tie each to a measurable target.\n`;
-                out += `• Run a two-week baseline using the 5 core metrics.\n`;
-                out += `• Trial improvements in current platform first where possible.\n`;
-                out += `• If migrating, build a short proof-of-value focusing on triage, reporting, and integrations.\n`;
+                out += `• Establish a two-week baseline using 5 core metrics.\n`;
+                out += `• Trial improvements in the current platform first where possible.\n`;
+                out += `• If migrating, run a short proof-of-value focused on triage, reporting, and integrations.\n`;
 
-                el("output").textContent = out;
+                $("output").textContent = out;
             }
 
             function copyReport() {
-                const text = el("output").textContent.trim();
+                const text = $("output").textContent.trim();
                 if (!text) return;
 
                 navigator.clipboard.writeText(text).then(() => {
-                    const btn = el("btnCopy");
+                    const btn = $("btnCopy");
                     const old = btn.textContent;
                     btn.textContent = "Copied";
                     setTimeout(() => btn.textContent = old, 1200);
@@ -627,12 +814,14 @@
 
             function resetForm() {
                 const ids = [
-                    "orgName", "teamSize", "platform", "ticketVolume", "channels", "sla",
-                    "integrations", "dataQuality", "processMaturity", "painNotes",
-                    "mustHave", "niceHave", "constraints", "migrationAppetite"
+                    "orgName", "teamSize", "platform", "ticketVolume",
+                    "channels", "sla", "priorityModel", "approvals",
+                    "integrations", "adminEffort",
+                    "dataQuality", "processMaturity", "queues", "kbCoverage",
+                    "painNotes", "mustHave", "niceHave", "constraints", "migrationAppetite"
                 ];
                 ids.forEach(id => {
-                    const e = el(id);
+                    const e = $(id);
                     if (!e) return;
                     if (e.tagName === "SELECT") e.value = "";
                     else e.value = "";
@@ -642,14 +831,19 @@
                     "fAutomation", "fKb", "fSelfService", "fAsset", "fChange", "fOnCall", "fReporting", "fIntegrations",
                     "pTriage", "pReporting", "pKbFind", "pAutomation", "pUserExperience", "pCost", "pAdmin", "pIntegrations"
                 ];
-                checks.forEach(id => { if (el(id)) el(id).checked = false; });
+                checks.forEach(id => { if ($(id)) $(id).checked = false; });
 
-                el("output").textContent = "";
+                $("output").textContent = "";
+                setStep(0);
             }
 
-            el("btnGenerate").addEventListener("click", generateReport);
-            el("btnCopy").addEventListener("click", copyReport);
-            el("btnReset").addEventListener("click", resetForm);
+            $("btnBack").addEventListener("click", () => setStep(step - 1));
+            $("btnNext").addEventListener("click", () => setStep(step + 1));
+            $("btnGenerate").addEventListener("click", generateReport);
+            $("btnCopy").addEventListener("click", copyReport);
+            $("btnReset").addEventListener("click", resetForm);
+
+            setStep(0);
         })();
     </script>
 
