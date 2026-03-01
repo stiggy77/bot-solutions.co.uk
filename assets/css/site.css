@@ -146,8 +146,6 @@
    BASE / LAYOUT
    ========================= */
 
-
-
 /* Prevent horizontal scroll on mobile from glows/blurred elements */
 
 html,
@@ -216,8 +214,6 @@ body {
 /* =========================
    HEADER
    ========================= */
-
-
 
 .site-header {
 
@@ -332,8 +328,6 @@ body {
 /* =========================
    NAV
    ========================= */
-
-
 
 .nav {
 
@@ -487,8 +481,6 @@ body {
    HERO
    ========================= */
 
-
-
 .hero {
 
   position: relative;
@@ -599,8 +591,6 @@ h1 {
    BUTTONS
    ========================= */
 
-
-
 .btn {
 
   padding: 10px 16px;
@@ -691,8 +681,6 @@ h1 {
    PANEL
    ========================= */
 
-
-
 .hero-panel {
 
   background: var(--panelSoft);
@@ -732,8 +720,6 @@ h1 {
 /* =========================
    CARDS / SECTIONS
    ========================= */
-
-
 
 .section {
 
@@ -807,8 +793,6 @@ h1 {
    RESOURCES / GUIDE CARDS
    (fixed bubble size + text clamp + remove underline)
    ========================= */
-
-
 
 /* make the whole card clickable link behave like a block (Resources page) */
 
@@ -994,8 +978,6 @@ a.card-link:focus {
    FOOTER
    ========================= */
 
-
-
 .site-footer {
 
   border-top: 1px solid var(--line);
@@ -1027,8 +1009,6 @@ a.card-link:focus {
 /* =========================
    RESPONSIVE
    ========================= */
-
-
 
 @media (max-width: 900px) {
 
@@ -1117,10 +1097,44 @@ a.card-link:focus {
 
 
 /* =========================
-   CONTACT FORM
+   FORM CONTROLS (GLOBAL)
+   Fix native select dropdown readability in dark mode
    ========================= */
 
+/* Ensure the control itself uses your theme tokens */
+select,
+input,
+textarea {
+  color: var(--text);
+  background: var(--cardBg);
+  border: 1px solid var(--line);
+}
 
+/* Improve the opened dropdown list colours where the browser allows it */
+select option,
+select optgroup {
+  background: var(--panel);
+  color: var(--text);
+}
+
+/* Light theme for the same controls */
+:root[data-theme="light"] select,
+:root[data-theme="light"] input,
+:root[data-theme="light"] textarea {
+  background: var(--cardBg);
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+
+:root[data-theme="light"] select option,
+:root[data-theme="light"] select optgroup {
+  background: var(--panel);
+  color: var(--text);
+}
+
+/* =========================
+   CONTACT FORM
+   ========================= */
 
 .contact-note {
 
